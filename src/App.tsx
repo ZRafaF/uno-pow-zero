@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "@pages/Home";
 import Game from "@pages/Game";
-import { GlobalProvider } from "@contexts/GlobalContext";
+import CardsContext, { cardsContextDefault } from "@contexts/CardsContext";
+
+import { signInAnonymously } from "firebase/auth";
+import { auth } from "@config/firebase";
+
+signInAnonymously(auth).catch(alert);
 
 function App() {
+	const [cardsContext, setCardsContext] = useState(cardsContextDefault);
+
 	return (
-		<GlobalProvider>
+		<CardsContext.Provider value={[cardsContext, setCardsContext]}>
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/game" element={<Game />} />
 				</Routes>
 			</BrowserRouter>
-		</GlobalProvider>
+		</CardsContext.Provider>
 	);
 }
 

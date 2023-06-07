@@ -6,6 +6,7 @@
 			"@config/*": ["./config/*"],
 			"@pages/*": ["./pages/*"],
 			"@contexts/*": ["./contexts/*"],
+			"@Types/*": ["./Types/*"],
 			"@assets/*": ["./assets/*"]
 		}
 	}
