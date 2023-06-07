@@ -1,10 +1,12 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "@components/*": ["./components/*"],
-      "@config/*": ["./config/*"],
-      "@assets/*": ["./assets/*"]
-    }
-  }
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"paths": {
+			"@components/*": ["./components/*"],
+			"@config/*": ["./config/*"],
+			"@pages/*": ["./pages/*"],
+			"@contexts/*": ["./contexts/*"],
+			"@assets/*": ["./assets/*"]
+		}
+	}
 }

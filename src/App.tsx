@@ -1,28 +1,21 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 
-import card from "@assets/Uno/individual/blue/0_blue.png";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "@pages/Home";
+import Game from "@pages/Game";
+import { GlobalProvider } from "@contexts/GlobalContext";
 
 function App() {
 	return (
-		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.tsx</code> and save to reload.
-				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
-				<img src={card} alt="card" />
-			</header>
-		</div>
+		<GlobalProvider>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/game" element={<Game />} />
+				</Routes>
+			</BrowserRouter>
+		</GlobalProvider>
 	);
 }
 
