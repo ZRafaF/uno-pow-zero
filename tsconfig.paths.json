@@ -7,6 +7,7 @@
 			"@pages/*": ["./pages/*"],
 			"@contexts/*": ["./contexts/*"],
 			"@Types/*": ["./Types/*"],
+			"@helper/*": ["./helper/*"],
 			"@assets/*": ["./assets/*"]
 		}
 	}

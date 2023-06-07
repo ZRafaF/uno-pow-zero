@@ -14,8 +14,6 @@ import {
 	Container,
 	CssBaseline,
 	FormControlLabel,
-	Grid,
-	Link,
 	Paper,
 	TextField,
 	ThemeProvider,
@@ -24,9 +22,7 @@ import {
 } from "@mui/material";
 import SportsEsportsOutlinedIcon from "@mui/icons-material/SportsEsportsOutlined";
 const darkTheme = createTheme({
-	palette: {
-		mode: "dark",
-	},
+	palette: {},
 });
 
 interface HomeProps {}
@@ -112,18 +108,6 @@ const Home: FunctionComponent<HomeProps> = () => {
 							>
 								Play
 							</Button>
-							<Grid container>
-								<Grid item xs>
-									<Link href="#" variant="body2">
-										Forgot password?
-									</Link>
-								</Grid>
-								<Grid item>
-									<Link href="#" variant="body2">
-										{"Don't have an account? Sign Up"}
-									</Link>
-								</Grid>
-							</Grid>
 						</Box>
 					</Paper>
 				</Box>
