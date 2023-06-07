@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import Card from "@Types/Card";
-import React, { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 
 interface GlobalContextProps {
 	cards: Card[];
