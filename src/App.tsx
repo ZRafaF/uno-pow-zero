@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 
 import Home from "@pages/Home";
 import Room from "@pages/Room";
@@ -26,12 +26,12 @@ function App() {
 		<ThemeProvider theme={darkTheme}>
 			<CardsContext.Provider value={[cardsContext, setCardsContext]}>
 				<ToastContainer />
-				<BrowserRouter>
+				<HashRouter>
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/room/:roomId" element={<Room />} />
 					</Routes>
-				</BrowserRouter>
+				</HashRouter>
 			</CardsContext.Provider>
 		</ThemeProvider>
 	);
