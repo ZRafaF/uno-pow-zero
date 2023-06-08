@@ -14,9 +14,14 @@ export function getCardImage(card: Card) {
 		card.color === "black" &&
 		!(card.type === "4plus" || card.type === "wild")
 	) {
-		return "/assets/Uno/individual/card_back/card_back.png";
+		return (
+			process.env.PUBLIC_URL +
+			"/assets/Uno/individual/card_back/card_back.png"
+		);
 	}
-	const imgPath = `/assets/Uno/individual/${card.color}/${card.type}_${card.color}.png`;
+	const imgPath =
+		process.env.PUBLIC_URL +
+		`/assets/Uno/individual/${card.color}/${card.type}_${card.color}.png`;
 
 	return imgPath;
 }

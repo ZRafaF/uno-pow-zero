@@ -37,7 +37,10 @@ const AvatarButton: FunctionComponent<AvatarButtonProps> = ({
 			>
 				<Avatar
 					alt={avatarName}
-					src={`/assets/ProfileAnimals/${avatarName}.png`}
+					src={
+						process.env.PUBLIC_URL +
+						`/assets/ProfileAnimals/${avatarName}.png`
+					}
 					sx={{
 						width: 75,
 						height: 75,
