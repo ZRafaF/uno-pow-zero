@@ -28,12 +28,12 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 
 	const createRoom = async () => {
 		setCreateloading(true);
-		console.log("Start");
 		signInAnonymously(auth)
 			.then((userSign) => {
 				const newRoom: RoomDoc = {
 					creatorUid: userSign.user.uid,
 					currentCard: { color: "black", type: "wild" },
+					currentPlayerUid: "",
 					currentDirection: "cw",
 					playersUid: [],
 					roomId: "",
@@ -49,7 +49,6 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 						console.error(err);
 					})
 					.then(() => {
-						console.log("end");
 						setCreateloading(false);
 					});
 			})
@@ -76,6 +75,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 						loading={createLoading}
 						variant="contained"
 						onClick={createRoom}
+						fullWidth
 					>
 						Create room
 					</LoadingButton>

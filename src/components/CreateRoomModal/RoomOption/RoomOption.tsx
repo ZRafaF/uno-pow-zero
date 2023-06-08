@@ -18,7 +18,7 @@ const RoomOption: FunctionComponent<RoomOptionProps> = () => {
 				<SportsEsportsOutlinedIcon />
 			</Avatar>
 			<Typography component="h1" variant="h5">
-				UPZ 1<sup>0</sup>
+				UPZ 1⁰
 			</Typography>
 			<Grid
 				container

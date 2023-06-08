@@ -12,6 +12,7 @@ import { auth } from "@config/firebase";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
+import PageNotFound from "@pages/PageNotFound";
 
 signInAnonymously(auth).catch(alert);
 
@@ -30,6 +31,7 @@ function App() {
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/room/:roomId" element={<Room />} />
+						<Route path="*" element={<PageNotFound />} />
 					</Routes>
 				</HashRouter>
 			</CardsContext.Provider>

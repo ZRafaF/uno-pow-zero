@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent } from "react";
+import { ChangeEvent, FunctionComponent, useState } from "react";
 
 import {
 	Button,
@@ -15,15 +15,34 @@ import {
 	Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 interface FindRoomProps {}
 
 const FindRoom: FunctionComponent<FindRoomProps> = () => {
+	const [validUsername, setValidUsername] = useState<boolean>(false);
+	const navigate = useNavigate();
+
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
-		console.log({
-			roomKey: data.get("roomKey"),
-		});
+		const roomKey = data.get("roomKey");
+
+		if (!roomKey) {
+			toast.error("Invalid room key!");
+			return;
+		}
+		navigate("/room/" + roomKey);
+	};
+
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const textValue = event.target.value;
+		if (textValue.length) {
+			setValidUsername(true);
+		} else {
+			setValidUsername(false);
+		}
 	};
 
 	return (
@@ -53,6 +72,8 @@ const FindRoom: FunctionComponent<FindRoomProps> = () => {
 								name="roomKey"
 								autoComplete="username"
 								autoFocus
+								onChange={handleChange}
+								error={!validUsername}
 							/>
 						</Grid>
 						<Grid item>
@@ -60,6 +81,7 @@ const FindRoom: FunctionComponent<FindRoomProps> = () => {
 								variant="contained"
 								endIcon={<SearchIcon />}
 								type="submit"
+								disabled={!validUsername}
 							>
 								Find
 							</Button>

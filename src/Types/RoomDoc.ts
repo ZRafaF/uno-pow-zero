@@ -9,6 +9,7 @@ export default interface RoomDoc {
 	creatorUid: string;
 	currentCard: Card;
 	currentDirection: "cw" | "ccw";
+	currentPlayerUid: string;
 	playersUid: string[];
 	roomId: string;
 }

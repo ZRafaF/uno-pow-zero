@@ -7,37 +7,62 @@ import ChooseUsername from "@components/ChooseUsername/ChooseUsername";
 import PlayerCards from "@components/PlayerCards/PlayerCards";
 import { makeCard } from "@helper/cardHelper";
 import { FunctionComponent } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { doc } from "firebase/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
+import { db } from "@config/firebase";
+import RoomDoc from "@Types/RoomDoc";
+
+const cardsArray = [
+	makeCard("black", "wild"),
+	makeCard("blue", "2"),
+	makeCard("red", "3"),
+	makeCard("red", "3"),
+	makeCard("blue", "3"),
+	makeCard("red", "3"),
+	makeCard("yellow", "3"),
+	makeCard("red", "3"),
+	makeCard("red", "2"),
+	makeCard("green", "3"),
+	makeCard("red", "3"),
+	makeCard("red", "3"),
+	makeCard("red", "5"),
+	makeCard("blue", "3"),
+	makeCard("red", "0"),
+	makeCard("red", "2"),
+	makeCard("red", "3"),
+	makeCard("green", "3"),
+	makeCard("red", "3"),
+	makeCard("red", "3"),
+	makeCard("red", "3"),
+	makeCard("yellow", "3"),
+	makeCard("yellow", "2plus"),
+];
 
 interface RoomProps {}
 
 const Room: FunctionComponent<RoomProps> = () => {
 	const roomId = useParams().roomId;
-	const cardsArray = [
-		makeCard("black", "wild"),
-		makeCard("blue", "2"),
-		makeCard("red", "3"),
-		makeCard("red", "3"),
-		makeCard("blue", "3"),
-		makeCard("red", "3"),
-		makeCard("yellow", "3"),
-		makeCard("red", "3"),
-		makeCard("red", "2"),
-		makeCard("green", "3"),
-		makeCard("red", "3"),
-		makeCard("red", "3"),
-		makeCard("red", "5"),
-		makeCard("blue", "3"),
-		makeCard("red", "0"),
-		makeCard("red", "2"),
-		makeCard("red", "3"),
-		makeCard("green", "3"),
-		makeCard("red", "3"),
-		makeCard("red", "3"),
-		makeCard("red", "3"),
-		makeCard("yellow", "3"),
-		makeCard("yellow", "2plus"),
-	];
+	const navigate = useNavigate();
+
+	const [roomDocument, loading, error] = useDocument(
+		doc(db, "rooms", roomId ? roomId : "-1"),
+		{
+			snapshotListenOptions: { includeMetadataChanges: true },
+		}
+	);
+
+	const roomData = roomDocument?.data() as RoomDoc;
+
+	if (!roomData && !loading) {
+		navigate("/404");
+	}
+
+	if (error) {
+		navigate("/");
+	}
+	console.log(roomData);
 
 	return (
 		<div>
