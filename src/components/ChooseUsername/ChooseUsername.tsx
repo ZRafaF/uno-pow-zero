@@ -14,21 +14,25 @@ import {
 } from "@mui/material";
 import PfpPicker from "./PfpPicker/PfpPicker";
 import { toast } from "react-toastify";
-import { auth } from "@config/firebase";
+import { auth, playersRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { LoadingButton } from "@mui/lab";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import playerDoc from "@Types/PlayerDoc";
+import { addDoc, getDocs, query, where } from "firebase/firestore";
 
-interface ChooseUsernameProps {}
+interface ChooseUsernameProps {
+	roomId: string;
+}
 
-const ChooseUsername: FunctionComponent<ChooseUsernameProps> = () => {
+const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
-		const username = data.get("username");
+		const username = data.get("username") as string;
 		if (!username) {
 			toast.error("Invalid username");
 			return;
@@ -40,7 +44,29 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = () => {
 		setSending(true);
 		signInAnonymously(auth)
 			.then((res) => {
-				console.log(res.user.uid);
+				const uid = res.user.uid;
+				const newPlayer: playerDoc = {
+					roomId: roomId,
+					cards: [],
+					pfp: currentPfp,
+					uid: uid,
+					username: username,
+				};
+				addDoc(playersRef, newPlayer)
+					.then((res) => {
+						const q = query(playersRef, where("uid", "==", uid));
+						getDocs(q).then((querySnapshot) => {
+							querySnapshot.forEach((doc) => {
+								// doc.data() is never undefined for query doc snapshots
+								console.log(doc.id, " => ", doc.data());
+							});
+						});
+					})
+					.catch((err) => {
+						toast.error("Something went wrong");
+						console.error(err);
+					});
+				console.log(newPlayer);
 			})
 
 			.catch((err) => {

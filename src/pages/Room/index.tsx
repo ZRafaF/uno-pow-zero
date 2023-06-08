@@ -55,18 +55,16 @@ const Room: FunctionComponent<RoomProps> = () => {
 
 	const roomData = roomDocument?.data() as RoomDoc;
 
-	if (!roomData && !loading) {
+	if ((!roomData && !loading) || !roomId || error) {
 		navigate("/404");
+		return <></>;
 	}
 
-	if (error) {
-		navigate("/");
-	}
 	console.log(roomData);
 
 	return (
 		<div>
-			<ChooseUsername />
+			<ChooseUsername roomId={roomId} />
 			Room {roomId}
 			<PlayerCards cards={cardsArray} />
 		</div>

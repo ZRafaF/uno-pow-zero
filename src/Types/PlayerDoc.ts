@@ -10,4 +10,5 @@ export default interface playerDoc {
 	pfp: string;
 	roomId: string;
 	uid: string;
+	username: string;
 }
