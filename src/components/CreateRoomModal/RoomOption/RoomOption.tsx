@@ -4,17 +4,7 @@
 // https://opensource.org/licenses/MIT
 import React, { FunctionComponent } from "react";
 
-import {
-	Avatar,
-	Button,
-	Card,
-	CardActions,
-	CardContent,
-	Grid,
-	TextField,
-	Typography,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Avatar, Grid, Typography } from "@mui/material";
 import SportsEsportsOutlinedIcon from "@mui/icons-material/SportsEsportsOutlined";
 import CreateRoom from "./CreateRoom/CreateRoom";
 import FindRoom from "./FindRoom/FindRoom";
