@@ -3,26 +3,37 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "@pages/Home";
-import Game from "@pages/Game";
+import Room from "@pages/Room";
 import CardsContext, { cardsContextDefault } from "@contexts/CardsContext";
+import { ToastContainer } from "react-toastify";
 
 import { signInAnonymously } from "firebase/auth";
 import { auth } from "@config/firebase";
+import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from "@mui/material";
 
 signInAnonymously(auth).catch(alert);
+
+const darkTheme = createTheme({
+	palette: { mode: "light" },
+});
 
 function App() {
 	const [cardsContext, setCardsContext] = useState(cardsContextDefault);
 
 	return (
-		<CardsContext.Provider value={[cardsContext, setCardsContext]}>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/game" element={<Game />} />
-				</Routes>
-			</BrowserRouter>
-		</CardsContext.Provider>
+		<ThemeProvider theme={darkTheme}>
+			<CardsContext.Provider value={[cardsContext, setCardsContext]}>
+				<ToastContainer />
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/room/:roomId" element={<Room />} />
+					</Routes>
+				</BrowserRouter>
+			</CardsContext.Provider>
+		</ThemeProvider>
 	);
 }
 

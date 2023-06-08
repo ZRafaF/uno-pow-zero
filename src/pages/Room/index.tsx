@@ -3,13 +3,16 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import ChooseUsername from "@components/ChooseUsername/ChooseUsername";
 import PlayerCards from "@components/PlayerCards/PlayerCards";
 import { makeCard } from "@helper/cardHelper";
 import { FunctionComponent } from "react";
+import { useParams } from "react-router-dom";
 
-interface GameProps {}
+interface RoomProps {}
 
-const Game: FunctionComponent<GameProps> = () => {
+const Room: FunctionComponent<RoomProps> = () => {
+	const roomId = useParams().roomId;
 	const cardsArray = [
 		makeCard("black", "wild"),
 		makeCard("blue", "2"),
@@ -38,10 +41,11 @@ const Game: FunctionComponent<GameProps> = () => {
 
 	return (
 		<div>
-			Game page
+			<ChooseUsername />
+			Room {roomId}
 			<PlayerCards cards={cardsArray} />
 		</div>
 	);
 };
 
-export default Game;
+export default Room;
