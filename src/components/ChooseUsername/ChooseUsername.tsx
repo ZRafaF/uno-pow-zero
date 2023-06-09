@@ -2,13 +2,7 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import React, {
-	FunctionComponent,
-	useState,
-	useContext,
-	useEffect,
-} from "react";
-import UserIdContext from "@contexts/UserIdContext";
+import React, { FunctionComponent, useState, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
@@ -27,17 +21,8 @@ import { auth, db, playersRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { LoadingButton } from "@mui/lab";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PlayerDoc from "@Types/PlayerDoc";
-import {
-	addDoc,
-	deleteDoc,
-	doc,
-	getDocs,
-	query,
-	updateDoc,
-	where,
-} from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { PlayerDoc } from "@Types/DocTypes";
+import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { DocsContext } from "@contexts/DocsContext";
 
 interface ChooseUsernameProps {
@@ -46,7 +31,6 @@ interface ChooseUsernameProps {
 
 const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 	const [docsContext] = useContext(DocsContext);
-	const [userIdContext, setUserIdContext] = useContext(UserIdContext);
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
 

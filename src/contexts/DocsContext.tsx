@@ -3,10 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import CardsDoc from "@Types/CardsDoc";
+import { PlayerDoc, RoomDoc, CardsDoc } from "@Types/DocTypes";
 import { CardsCTX, PlayerCTX, RoomCTX } from "@Types/DocsCTX";
-import PlayerDoc from "@Types/PlayerDoc";
-import RoomDoc from "@Types/RoomDoc";
 import { cardsRef, playersRef, roomsRef } from "@config/firebase";
 import { query, where } from "firebase/firestore";
 import {
@@ -58,7 +56,6 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 		playersSnapshot.forEach((doc) => {
 			playerArray.push(doc.data() as PlayerDoc);
 		});
-		console.log("a", playerArray);
 
 		setDocsContext((prevDoc) => {
 			const newValue: PlayerCTX = {
@@ -70,7 +67,7 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 				player: newValue,
 			};
 		});
-	}, [playersSnapshot, setDocsContext]);
+	}, [playersSnapshot, setDocsContext, playersLoading]);
 
 	useEffect(() => {
 		if (roomsSnapshot === undefined) return;
@@ -89,7 +86,7 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 				room: newValue,
 			};
 		});
-	}, [roomsSnapshot, setDocsContext]);
+	}, [roomsSnapshot, setDocsContext, roomsLoading]);
 
 	useEffect(() => {
 		if (cardsSnapshot === undefined) return;
@@ -108,10 +105,10 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 				cards: newValue,
 			};
 		});
-	}, [cardsSnapshot, setDocsContext]);
+	}, [cardsSnapshot, setDocsContext, cardsLoading]);
 
 	useEffect(() => {
-		console.log(docsContext);
+		//console.log(docsContext);
 	}, [docsContext]);
 
 	return (

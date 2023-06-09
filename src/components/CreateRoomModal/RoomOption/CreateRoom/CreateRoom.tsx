@@ -7,7 +7,7 @@ import { FunctionComponent, useState } from "react";
 import { toast } from "react-toastify";
 import { auth, db, roomsRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
-import RoomDoc from "@Types/RoomDoc";
+import { RoomDoc } from "@Types/DocTypes";
 import {
 	addDoc,
 	deleteDoc,
