@@ -8,7 +8,7 @@ import CardsContext, { cardsContextDefault } from "@contexts/CardsContext";
 import { ToastContainer } from "react-toastify";
 
 import { signInAnonymously } from "firebase/auth";
-import { auth, playersRef } from "@config/firebase";
+import { auth } from "@config/firebase";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
@@ -16,8 +16,6 @@ import PageNotFound from "@pages/PageNotFound";
 import UserIdContext, { userIdContextDefault } from "@contexts/UserIdContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@pages/Login";
-import { getDocs, query, where } from "firebase/firestore";
-import PlayerDoc from "@Types/PlayerDoc";
 import { getPlayerDocUid } from "@helper/firebaseHelper";
 
 signInAnonymously(auth).catch(alert);

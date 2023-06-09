@@ -3,7 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import Card from "@Types/Card";
 import { createContext, Dispatch, SetStateAction } from "react";
 
 interface UserIdContextProps {
