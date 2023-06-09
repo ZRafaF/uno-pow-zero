@@ -5,10 +5,18 @@
 
 import { FunctionComponent, useState } from "react";
 import { toast } from "react-toastify";
-import { auth, roomsRef } from "@config/firebase";
+import { auth, db, roomsRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
 import RoomDoc from "@Types/RoomDoc";
-import { addDoc } from "firebase/firestore";
+import {
+	addDoc,
+	deleteDoc,
+	doc,
+	getDocs,
+	query,
+	updateDoc,
+	where,
+} from "firebase/firestore";
 import {
 	Card,
 	CardActions,
@@ -23,40 +31,59 @@ import { useNavigate } from "react-router-dom";
 interface CreateRoomProps {}
 
 const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
-	const [createLoading, setCreateloading] = useState<boolean>(false);
+	const [createLoading, setCreateLoading] = useState<boolean>(false);
 	const navigate = useNavigate();
 
+	const updateOtherRooms = async (uid: string) => {
+		const q = query(roomsRef, where("creatorUid", "==", uid));
+		const querySnapshot = await getDocs(q);
+		querySnapshot.forEach((roomDoc) => {
+			const roomTyped = roomDoc.data() as RoomDoc;
+			deleteDoc(doc(db, "rooms", roomTyped.roomId));
+		});
+	};
+
+	const addRoomDoc = (newRoom: RoomDoc) => {
+		try {
+			addDoc(roomsRef, newRoom).then((res) => {
+				const roomId = res.id;
+				console.log(res.id);
+				updateDoc(doc(db, "rooms", roomId), {
+					roomId: roomId,
+				}).then(() => {
+					navigate("/" + roomId + "/room");
+				});
+			});
+		} catch (err) {
+			toast.error("Something went wrong");
+			console.error(err);
+		} finally {
+			setCreateLoading(false);
+		}
+	};
+
 	const createRoom = async () => {
-		setCreateloading(true);
-		signInAnonymously(auth)
-			.then((userSign) => {
+		setCreateLoading(true);
+		try {
+			signInAnonymously(auth).then((userSign) => {
+				const creatorUid = userSign.user.uid;
 				const newRoom: RoomDoc = {
-					creatorUid: userSign.user.uid,
+					creatorUid: creatorUid,
 					currentCard: { color: "black", type: "wild" },
 					currentPlayerUid: "",
 					currentDirection: "cw",
-					playersUid: [],
+					playersUid: [creatorUid],
 					roomId: "",
 				};
-				addDoc(roomsRef, newRoom)
-					.then((res) => {
-						const roomId = res.id;
-						console.log(res.id);
-						navigate("/room/" + roomId);
-					})
-					.catch((err) => {
-						toast.error("Something went wrong");
-						console.error(err);
-					})
-					.then(() => {
-						setCreateloading(false);
-					});
-			})
-			.catch((err) => {
-				toast.error("Something went wrong");
-				console.error(err);
-			})
-			.finally(() => {});
+
+				updateOtherRooms(creatorUid).then(() => {
+					addRoomDoc(newRoom);
+				});
+			});
+		} catch (err) {
+			toast.error("Something went wrong");
+			console.error(err);
+		}
 	};
 	return (
 		<Grid item>

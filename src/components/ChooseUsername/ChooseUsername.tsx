@@ -2,32 +2,85 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import React, { FunctionComponent, useState } from "react";
+import React, {
+	FunctionComponent,
+	useState,
+	useContext,
+	useEffect,
+} from "react";
+import UserIdContext from "@contexts/UserIdContext";
+import { Link as RouterLink } from "react-router-dom";
 
 import {
 	Avatar,
 	Box,
 	Container,
+	Grid,
+	Link,
 	Paper,
 	TextField,
 	Typography,
 } from "@mui/material";
 import PfpPicker from "./PfpPicker/PfpPicker";
 import { toast } from "react-toastify";
-import { auth, playersRef } from "@config/firebase";
+import { auth, db, playersRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { LoadingButton } from "@mui/lab";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import playerDoc from "@Types/PlayerDoc";
-import { addDoc, getDocs, query, where } from "firebase/firestore";
+import PlayerDoc from "@Types/PlayerDoc";
+import {
+	addDoc,
+	deleteDoc,
+	doc,
+	getDocs,
+	query,
+	updateDoc,
+	where,
+} from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 interface ChooseUsernameProps {
 	roomId: string;
 }
 
 const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
+	const [userIdContext, setUserIdContext] = useContext(UserIdContext);
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (userIdContext.playerDocId) {
+			setSending(false);
+
+			navigate("/" + roomId + "/room");
+		}
+	}, [userIdContext, roomId, navigate]);
+
+	const updateOthersPlayerInstances = async (newPlayer: PlayerDoc) => {
+		const q = query(playersRef, where("uid", "==", newPlayer.uid));
+		const querySnapshot = await getDocs(q);
+		querySnapshot.forEach((playerDoc) => {
+			const playerTyped = playerDoc.data() as PlayerDoc;
+			deleteDoc(doc(db, "players", playerTyped.playerDocId));
+		});
+	};
+
+	const createPlayer = async (newPlayer: PlayerDoc) => {
+		await updateOthersPlayerInstances(newPlayer).then(() => {
+			addDoc(playersRef, newPlayer).then((res) => {
+				const playerDocId = res.id;
+				updateDoc(doc(db, "players", playerDocId), {
+					playerDocId: playerDocId,
+				}).then(() => {
+					setUserIdContext({
+						uid: res.id,
+						playerDocId: playerDocId,
+					});
+				});
+			});
+		});
+	};
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -42,47 +95,32 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 			return;
 		}
 		setSending(true);
-		signInAnonymously(auth)
-			.then((res) => {
+
+		try {
+			signInAnonymously(auth).then((res) => {
 				const uid = res.user.uid;
-				const newPlayer: playerDoc = {
+				const newPlayer: PlayerDoc = {
 					roomId: roomId,
 					cards: [],
 					pfp: currentPfp,
+					playerDocId: "",
 					uid: uid,
 					username: username,
 				};
-				addDoc(playersRef, newPlayer)
-					.then((res) => {
-						const q = query(playersRef, where("uid", "==", uid));
-						getDocs(q).then((querySnapshot) => {
-							querySnapshot.forEach((doc) => {
-								// doc.data() is never undefined for query doc snapshots
-								console.log(doc.id, " => ", doc.data());
-							});
-						});
-					})
-					.catch((err) => {
-						toast.error("Something went wrong");
-						console.error(err);
-					});
-				console.log(newPlayer);
-			})
-
-			.catch((err) => {
-				toast.error("Something went wrong");
-				console.error(err);
-			})
-			.finally(() => {
-				setSending(false);
+				createPlayer(newPlayer);
 			});
+		} catch (err) {
+			toast.error("Something went wrong");
+			console.error(err);
+		} finally {
+		}
 	};
 
 	return (
 		<Container component="main" maxWidth="sm">
 			<Box
 				sx={{
-					marginTop: 8,
+					my: 8,
 				}}
 			>
 				<Paper
@@ -97,7 +135,7 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 				>
 					<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
 						<AccountCircleIcon />
-					</Avatar>{" "}
+					</Avatar>
 					<Typography component="h1" variant="h5">
 						Pick a username
 					</Typography>
@@ -133,6 +171,13 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 						>
 							Next
 						</LoadingButton>
+						<Grid container>
+							<Grid item xs>
+								<Link component={RouterLink} to="/">
+									Return Home
+								</Link>
+							</Grid>
+						</Grid>
 					</Box>
 				</Paper>
 			</Box>

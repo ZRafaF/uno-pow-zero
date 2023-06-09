@@ -14,7 +14,7 @@ const CreateRoomModal: FunctionComponent<CreateRoomModalProps> = () => {
 		<Container component="main" maxWidth="md">
 			<Box
 				sx={{
-					marginTop: 8,
+					my: 8,
 				}}
 			>
 				<Paper
