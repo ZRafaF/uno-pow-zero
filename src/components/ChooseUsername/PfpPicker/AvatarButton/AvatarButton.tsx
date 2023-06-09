@@ -44,8 +44,10 @@ const AvatarButton: FunctionComponent<AvatarButtonProps> = ({
 					sx={{
 						width: 75,
 						height: 75,
-						borderStyle: getBorderStyle(),
-						borderColor: "blue",
+						outlineStyle: getBorderStyle(),
+						outlineColor: "primary",
+						outlineWidth: "5px",
+						outlineOffset: "-2px",
 					}}
 				/>
 			</IconButton>

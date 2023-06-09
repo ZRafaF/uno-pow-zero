@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { FunctionComponent, useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { DocsContext } from "@contexts/DocsContext";
 import useCheckRoom from "@hooks/useCheckRoom";
@@ -16,7 +16,6 @@ import {
 	Divider,
 	Drawer,
 	IconButton,
-	Link,
 	List,
 	ListItem,
 	ListItemButton,
@@ -28,6 +27,8 @@ import {
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
 import Background from "@components/Background/Background";
 import GameArea from "@components/GameArea/GameArea";
 
@@ -59,29 +60,41 @@ const Room: FunctionComponent<RoomProps> = () => {
 		}
 	}, [docsContext, navigate, roomId]);
 
+	const copyRoomKey = () => {
+		navigator.clipboard.writeText(roomId);
+	};
+
 	const drawer = (
 		<div>
 			<Toolbar />
 			<Divider />
 			<List>
 				<ListItem disablePadding>
-					<ListItemButton>
+					<ListItem button>
 						<ListItemIcon>
 							<ShareIcon />
 						</ListItemIcon>
 						<ListItemText primary="Share Room" />
+					</ListItem>
+				</ListItem>
+				<ListItem disablePadding>
+					<ListItemButton onClick={copyRoomKey}>
+						<ListItemIcon>
+							<ContentCopyIcon />
+						</ListItemIcon>
+						<ListItemText primary="Copy key" />
 					</ListItemButton>
 				</ListItem>
 			</List>
 			<Divider />
 			<List>
 				<ListItem disablePadding>
-					<ListItemButton component={Link} href="/">
+					<ListItem button component={Link} to={"/"}>
 						<ListItemIcon>
 							<LogoutIcon />
 						</ListItemIcon>
 						<ListItemText primary="EXIT" />
-					</ListItemButton>
+					</ListItem>
 				</ListItem>
 			</List>
 		</div>
