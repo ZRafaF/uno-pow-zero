@@ -50,7 +50,7 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (userIdContext.playerDocId) {
+		if (false) {
 			setSending(false);
 
 			navigate("/" + roomId + "/room");
@@ -72,11 +72,6 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 				const playerDocId = res.id;
 				updateDoc(doc(db, "players", playerDocId), {
 					playerDocId: playerDocId,
-				}).then(() => {
-					setUserIdContext({
-						uid: res.id,
-						playerDocId: playerDocId,
-					});
 				});
 			});
 		});
@@ -101,7 +96,7 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 				const uid = res.user.uid;
 				const newPlayer: PlayerDoc = {
 					roomId: roomId,
-					cards: [],
+					cardsDocId: "",
 					pfp: currentPfp,
 					playerDocId: "",
 					uid: uid,

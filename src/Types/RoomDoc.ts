@@ -6,7 +6,7 @@
 import Card from "./Card";
 
 export default interface RoomDoc {
-	creatorUid: string;
+	uid: string;
 	currentCard: Card;
 	currentDirection: "cw" | "ccw";
 	currentPlayerUid: string;

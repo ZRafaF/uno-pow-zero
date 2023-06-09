@@ -6,6 +6,7 @@
 import { playersRef } from "@config/firebase";
 import { getDocs, query, where } from "firebase/firestore";
 import PlayerDoc from "@Types/PlayerDoc";
+import RoomDoc from "@Types/RoomDoc";
 
 export const getPlayerDocUid = async (uid: string) => {
 	const q = query(playersRef, where("uid", "==", uid));
@@ -17,4 +18,16 @@ export const getPlayerDocUid = async (uid: string) => {
 	});
 
 	return playerDocId;
+};
+
+export const checkIfRoomIsValid = (
+	roomDoc: RoomDoc[],
+	roomId: string
+): boolean => {
+	let res = false;
+	roomDoc.forEach((element) => {
+		if (element.roomId == roomId) res = true;
+	});
+
+	return res;
 };

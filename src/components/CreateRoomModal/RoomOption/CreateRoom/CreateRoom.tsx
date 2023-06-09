@@ -68,7 +68,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 			signInAnonymously(auth).then((userSign) => {
 				const creatorUid = userSign.user.uid;
 				const newRoom: RoomDoc = {
-					creatorUid: creatorUid,
+					uid: creatorUid,
 					currentCard: { color: "black", type: "wild" },
 					currentPlayerUid: "",
 					currentDirection: "cw",

@@ -5,11 +5,9 @@
 
 import Card from "./Card";
 
-export default interface PlayerDoc {
+export default interface CardsDoc {
+	cards: Card[];
 	cardsDocId: string;
-	pfp: string;
-	roomId: string;
 	uid: string;
-	username: string;
 	playerDocId: string;
 }
