@@ -21,7 +21,7 @@ import RoomNotFound from "@pages/RoomNotFound";
 signInAnonymously(auth).catch(alert);
 
 const darkTheme = createTheme({
-	palette: { mode: "light" },
+	palette: { mode: "dark" },
 });
 
 function App() {
