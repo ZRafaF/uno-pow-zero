@@ -43,7 +43,7 @@ interface RoomProps {}
 
 const Room: FunctionComponent<RoomProps> = () => {
 	const roomParam = useParams().roomId;
-	const roomId: string = roomParam ? roomParam : "";
+	const roomId: string = roomParam ? roomParam : "-1";
 	const navigate = useNavigate();
 	const [docsContext] = useContext(DocsContext);
 

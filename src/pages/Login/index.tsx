@@ -7,7 +7,7 @@ import Background from "@components/Background/Background";
 import ChooseUsername from "@components/ChooseUsername/ChooseUsername";
 import { DocsContext } from "@contexts/DocsContext";
 import useCheckPlayer from "@hooks/useCheckPlayer";
-import useCheckRoom from "@hooks/useCheckRoom";
+//import useCheckRoom from "@hooks/useCheckRoom";
 import React, { FunctionComponent, useContext } from "react";
 import { useParams } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const Login: FunctionComponent<LoginProps> = () => {
 	const roomId: string = roomParam ? roomParam : "";
 	const [docsContext] = useContext(DocsContext);
 
-	useCheckRoom(roomId, docsContext.room);
+	//useCheckRoom(roomId, docsContext.room);
 	useCheckPlayer(roomId, docsContext.player, docsContext.room);
 
 	return (

@@ -27,7 +27,6 @@ const useCheckPlayer = (
 	roomCtx: RoomCTX
 ) => {
 	const navigate = useNavigate();
-
 	useEffect(() => {
 		if (!roomCtx.loading && !playerCtx.loading) {
 			if (checkIfPlayerIsValid(playerCtx.docs, roomId)) {

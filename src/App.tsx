@@ -16,6 +16,7 @@ import UserIdContext, { userIdContextDefault } from "@contexts/UserIdContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@pages/Login";
 import DocsProvider from "@contexts/DocsContext";
+import RoomNotFound from "@pages/RoomNotFound";
 
 signInAnonymously(auth).catch(alert);
 
@@ -45,6 +46,10 @@ function App() {
 							<Route path="/" element={<Home />} />
 							<Route path="/:roomId/room" element={<Room />} />
 							<Route path="/:roomId/login" element={<Login />} />
+							<Route
+								path="/:roomId/404"
+								element={<RoomNotFound />}
+							/>
 							<Route path="*" element={<PageNotFound />} />
 						</Routes>
 					</HashRouter>
