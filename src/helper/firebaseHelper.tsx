@@ -3,18 +3,30 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { playersRef } from "@config/firebase";
-import { getDocs, query, where } from "firebase/firestore";
-import PlayerDoc from "@Types/PlayerDoc";
+import { PlayerDoc, RoomDoc } from "@Types/DocTypes";
 
-export const getPlayerDocUid = async (uid: string) => {
-	const q = query(playersRef, where("uid", "==", uid));
-	const querySnapshot = await getDocs(q);
-	let playerDocId: string = "";
-	querySnapshot.forEach((playerDoc) => {
-		const playerTyped = playerDoc.data() as PlayerDoc;
-		playerDocId = playerTyped.playerDocId;
+export const checkIfRoomIsValid = (
+	roomDocs: RoomDoc[],
+	roomId: string
+): boolean => {
+	let res = false;
+
+	roomDocs.forEach((element) => {
+		if (element.roomId === roomId) res = true;
 	});
 
-	return playerDocId;
+	return res;
+};
+
+export const checkIfPlayerIsValid = (
+	playerDocs: PlayerDoc[],
+	roomId: string
+): boolean => {
+	let res = false;
+
+	playerDocs.forEach((element) => {
+		if (element.roomId === roomId) res = true;
+	});
+
+	return res;
 };

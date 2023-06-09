@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Routes, Route, HashRouter } from "react-router-dom";
 
 import Home from "@pages/Home";
 import Room from "@pages/Room";
-import CardsContext, { cardsContextDefault } from "@contexts/CardsContext";
 import { ToastContainer } from "react-toastify";
 
 import { signInAnonymously } from "firebase/auth";
@@ -16,7 +15,7 @@ import PageNotFound from "@pages/PageNotFound";
 import UserIdContext, { userIdContextDefault } from "@contexts/UserIdContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@pages/Login";
-import { getPlayerDocUid } from "@helper/firebaseHelper";
+import DocsProvider from "@contexts/DocsContext";
 
 signInAnonymously(auth).catch(alert);
 
@@ -25,27 +24,21 @@ const darkTheme = createTheme({
 });
 
 function App() {
-	const [cardsContext, setCardsContext] = useState(cardsContextDefault);
 	const [userIdContext, setUserIdContext] = useState(userIdContextDefault);
-
 	const [user] = useAuthState(auth);
-	useEffect(() => {
-		const getPlayerUid = async (uid: string) => {
-			const playerDocUid = await getPlayerDocUid(uid);
 
-			setUserIdContext({ uid: uid, playerDocId: playerDocUid });
-		};
+	useEffect(() => {
 		if (!user) {
-			setUserIdContext({ uid: "", playerDocId: "" });
+			setUserIdContext("");
 		} else {
-			getPlayerUid(user.uid);
+			setUserIdContext(user.uid);
 		}
 	}, [user]);
 
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<UserIdContext.Provider value={[userIdContext, setUserIdContext]}>
-				<CardsContext.Provider value={[cardsContext, setCardsContext]}>
+				<DocsProvider uid={userIdContext}>
 					<ToastContainer />
 					<HashRouter>
 						<Routes>
@@ -55,7 +48,7 @@ function App() {
 							<Route path="*" element={<PageNotFound />} />
 						</Routes>
 					</HashRouter>
-				</CardsContext.Provider>
+				</DocsProvider>
 			</UserIdContext.Provider>
 		</ThemeProvider>
 	);

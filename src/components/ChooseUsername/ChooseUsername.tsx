@@ -2,13 +2,7 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import React, {
-	FunctionComponent,
-	useState,
-	useContext,
-	useEffect,
-} from "react";
-import UserIdContext from "@contexts/UserIdContext";
+import React, { FunctionComponent, useState, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
@@ -27,42 +21,22 @@ import { auth, db, playersRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { LoadingButton } from "@mui/lab";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PlayerDoc from "@Types/PlayerDoc";
-import {
-	addDoc,
-	deleteDoc,
-	doc,
-	getDocs,
-	query,
-	updateDoc,
-	where,
-} from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { PlayerDoc } from "@Types/DocTypes";
+import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { DocsContext } from "@contexts/DocsContext";
 
 interface ChooseUsernameProps {
 	roomId: string;
 }
 
 const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
-	const [userIdContext, setUserIdContext] = useContext(UserIdContext);
+	const [docsContext] = useContext(DocsContext);
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (userIdContext.playerDocId) {
-			setSending(false);
-
-			navigate("/" + roomId + "/room");
-		}
-	}, [userIdContext, roomId, navigate]);
 
 	const updateOthersPlayerInstances = async (newPlayer: PlayerDoc) => {
-		const q = query(playersRef, where("uid", "==", newPlayer.uid));
-		const querySnapshot = await getDocs(q);
-		querySnapshot.forEach((playerDoc) => {
-			const playerTyped = playerDoc.data() as PlayerDoc;
-			deleteDoc(doc(db, "players", playerTyped.playerDocId));
+		await docsContext.player.docs.forEach(async (playerDoc) => {
+			await deleteDoc(doc(db, "players", playerDoc.playerDocId));
 		});
 	};
 
@@ -72,11 +46,6 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 				const playerDocId = res.id;
 				updateDoc(doc(db, "players", playerDocId), {
 					playerDocId: playerDocId,
-				}).then(() => {
-					setUserIdContext({
-						uid: res.id,
-						playerDocId: playerDocId,
-					});
 				});
 			});
 		});
@@ -101,7 +70,7 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 				const uid = res.user.uid;
 				const newPlayer: PlayerDoc = {
 					roomId: roomId,
-					cards: [],
+					cardsDocId: "",
 					pfp: currentPfp,
 					playerDocId: "",
 					uid: uid,

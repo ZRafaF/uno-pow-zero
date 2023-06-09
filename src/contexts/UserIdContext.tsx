@@ -5,18 +5,10 @@
 
 import { createContext, Dispatch, SetStateAction } from "react";
 
-interface UserIdContextProps {
-	uid: string;
-	playerDocId: string;
-}
+export const userIdContextDefault: string = "";
 
-export const userIdContextDefault: UserIdContextProps = {
-	uid: "",
-	playerDocId: "",
-};
-
-const UserIdContext = createContext<
-	[UserIdContextProps, Dispatch<SetStateAction<UserIdContextProps>>]
->([userIdContextDefault, () => {}]);
+const UserIdContext = createContext<[string, Dispatch<SetStateAction<string>>]>(
+	[userIdContextDefault, () => {}]
+);
 
 export default UserIdContext;

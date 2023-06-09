@@ -7,7 +7,7 @@ import { FunctionComponent, useState } from "react";
 import { toast } from "react-toastify";
 import { auth, db, roomsRef } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
-import RoomDoc from "@Types/RoomDoc";
+import { RoomDoc } from "@Types/DocTypes";
 import {
 	addDoc,
 	deleteDoc,
@@ -47,7 +47,6 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 		try {
 			addDoc(roomsRef, newRoom).then((res) => {
 				const roomId = res.id;
-				console.log(res.id);
 				updateDoc(doc(db, "rooms", roomId), {
 					roomId: roomId,
 				}).then(() => {
@@ -68,7 +67,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 			signInAnonymously(auth).then((userSign) => {
 				const creatorUid = userSign.user.uid;
 				const newRoom: RoomDoc = {
-					creatorUid: creatorUid,
+					uid: creatorUid,
 					currentCard: { color: "black", type: "wild" },
 					currentPlayerUid: "",
 					currentDirection: "cw",
