@@ -38,31 +38,21 @@ import {
 	where,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { DocsContext } from "@contexts/DocsContext";
 
 interface ChooseUsernameProps {
 	roomId: string;
 }
 
 const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
+	const [docsContext] = useContext(DocsContext);
 	const [userIdContext, setUserIdContext] = useContext(UserIdContext);
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (false) {
-			setSending(false);
-
-			navigate("/" + roomId + "/room");
-		}
-	}, [userIdContext, roomId, navigate]);
 
 	const updateOthersPlayerInstances = async (newPlayer: PlayerDoc) => {
-		const q = query(playersRef, where("uid", "==", newPlayer.uid));
-		const querySnapshot = await getDocs(q);
-		querySnapshot.forEach((playerDoc) => {
-			const playerTyped = playerDoc.data() as PlayerDoc;
-			deleteDoc(doc(db, "players", playerTyped.playerDocId));
+		await docsContext.player.docs.forEach(async (playerDoc) => {
+			await deleteDoc(doc(db, "players", playerDoc.playerDocId));
 		});
 	};
 

@@ -71,7 +71,6 @@ const FindRoom: FunctionComponent<FindRoomProps> = () => {
 								label="Room Key"
 								name="roomKey"
 								autoComplete="username"
-								autoFocus
 								onChange={handleChange}
 								error={!validUsername}
 							/>

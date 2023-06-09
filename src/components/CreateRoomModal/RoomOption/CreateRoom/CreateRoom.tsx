@@ -47,7 +47,6 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 		try {
 			addDoc(roomsRef, newRoom).then((res) => {
 				const roomId = res.id;
-				console.log(res.id);
 				updateDoc(doc(db, "rooms", roomId), {
 					roomId: roomId,
 				}).then(() => {

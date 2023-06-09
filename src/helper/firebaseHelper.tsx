@@ -21,12 +21,27 @@ export const getPlayerDocUid = async (uid: string) => {
 };
 
 export const checkIfRoomIsValid = (
-	roomDoc: RoomDoc[],
+	roomDocs: RoomDoc[],
 	roomId: string
 ): boolean => {
 	let res = false;
-	roomDoc.forEach((element) => {
-		if (element.roomId == roomId) res = true;
+
+	roomDocs.forEach((element) => {
+		if (element.roomId === roomId) res = true;
+	});
+
+	return res;
+};
+
+export const checkIfPlayerIsValid = (
+	playerDocs: PlayerDoc[],
+	roomId: string
+): boolean => {
+	let res = false;
+
+	playerDocs.forEach((element) => {
+		console.log(playerDocs, roomId);
+		if (element.roomId === roomId) res = true;
 	});
 
 	return res;

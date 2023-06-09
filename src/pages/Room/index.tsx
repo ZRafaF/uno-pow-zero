@@ -11,7 +11,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { auth } from "@config/firebase";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { DocsContext } from "@contexts/DocsContext";
-import { checkIfRoomIsValid } from "@helper/firebaseHelper";
 import useCheckRoom from "@hooks/useCheckRoom";
 
 const cardsArray = [
@@ -46,20 +45,20 @@ const Room: FunctionComponent<RoomProps> = () => {
 	const roomParam = useParams().roomId;
 	const roomId: string = roomParam ? roomParam : "";
 	const navigate = useNavigate();
-	const [docsContext, setDocsContext] = useContext(DocsContext);
+	const [docsContext] = useContext(DocsContext);
 
-	useCheckRoom(roomId, docsContext.roomDoc);
+	useCheckRoom(roomId, docsContext.room);
 	useEffect(() => {
 		let hasPlayer = false;
-		docsContext.playerDoc.forEach((element) => {
-			if (element.roomId == roomId) {
+		docsContext.player.docs.forEach((element) => {
+			if (element.roomId === roomId) {
 				hasPlayer = true;
 			}
 		});
 		if (!hasPlayer) {
 			navigate("/" + roomId + "/login");
 		}
-	}, []);
+	}, [docsContext, navigate, roomId]);
 
 	const [signOut] = useSignOut(auth);
 

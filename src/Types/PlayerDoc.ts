@@ -3,8 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import Card from "./Card";
-
 export default interface PlayerDoc {
 	cardsDocId: string;
 	pfp: string;

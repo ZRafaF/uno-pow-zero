@@ -3,19 +3,21 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import RoomDoc from "@Types/RoomDoc";
+import { RoomCTX } from "@Types/DocsCTX";
 import { checkIfRoomIsValid } from "@helper/firebaseHelper";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const useCheckRoom = (roomId: string, roomsDoc: RoomDoc[]) => {
+const useCheckRoom = (roomId: string, roomCtx: RoomCTX) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!checkIfRoomIsValid(roomsDoc, roomId)) {
-			navigate("/404");
+		if (!roomCtx.loading) {
+			if (!checkIfRoomIsValid(roomCtx.docs, roomId)) {
+				navigate("/404");
+			}
 		}
-	}, [roomId]);
+	}, [roomId, navigate, roomCtx]);
 };
 
 export default useCheckRoom;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Routes, Route, HashRouter } from "react-router-dom";
 
@@ -15,7 +15,6 @@ import PageNotFound from "@pages/PageNotFound";
 import UserIdContext, { userIdContextDefault } from "@contexts/UserIdContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@pages/Login";
-import { getPlayerDocUid } from "@helper/firebaseHelper";
 import DocsProvider from "@contexts/DocsContext";
 
 signInAnonymously(auth).catch(alert);
@@ -26,18 +25,13 @@ const darkTheme = createTheme({
 
 function App() {
 	const [userIdContext, setUserIdContext] = useState(userIdContextDefault);
-
 	const [user] = useAuthState(auth);
-	useEffect(() => {
-		const getPlayerUid = async (uid: string) => {
-			const playerDocUid = await getPlayerDocUid(uid);
 
-			setUserIdContext(playerDocUid);
-		};
+	useEffect(() => {
 		if (!user) {
 			setUserIdContext("");
 		} else {
-			getPlayerUid(user.uid);
+			setUserIdContext(user.uid);
 		}
 	}, [user]);
 
