@@ -47,7 +47,7 @@ const FindRoom: FunctionComponent<FindRoomProps> = () => {
 
 	return (
 		<Grid item component="form" noValidate onSubmit={handleSubmit}>
-			<Card variant="outlined">
+			<Card variant="elevation" elevation={4}>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="div">
 						Find a room

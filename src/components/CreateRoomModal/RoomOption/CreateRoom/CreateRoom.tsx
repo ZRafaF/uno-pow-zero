@@ -50,7 +50,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 				updateDoc(doc(db, "rooms", roomId), {
 					roomId: roomId,
 				}).then(() => {
-					navigate("/" + roomId + "/room");
+					navigate("/" + roomId + "/login");
 				});
 			});
 		} catch (err) {
@@ -86,7 +86,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 	};
 	return (
 		<Grid item>
-			<Card variant="outlined">
+			<Card variant="elevation" elevation={4}>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="div">
 						Create a room

@@ -6,11 +6,11 @@
  */
 
 .player_cards_div {
-	margin: 20px;
 }
 
 .carousel {
 	border-radius: 20px;
+	width: 10px;
 	overflow: hidden;
 	&:after {
 		content: "";
@@ -22,9 +22,9 @@
 		background-image: linear-gradient(
 			to right,
 			rgba(255, 255, 255, 0),
-			#ffffff 75%
+			#ffffff 90%
 		);
-		width: 15%;
+		width: 5%;
 	}
 	&:before {
 		content: "";
@@ -36,8 +36,8 @@
 		background-image: linear-gradient(
 			to left,
 			rgba(255, 255, 255, 0),
-			#ffffff 75%
+			#ffffff 90%
 		);
-		width: 15%;
+		width: 5%;
 	}
 }

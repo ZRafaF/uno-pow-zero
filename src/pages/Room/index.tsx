@@ -3,41 +3,35 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import PlayerCards from "@components/PlayerCards/PlayerCards";
-import { makeCard } from "@helper/cardHelper";
-import { FunctionComponent, useContext, useEffect } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { auth } from "@config/firebase";
-import { useSignOut } from "react-firebase-hooks/auth";
 import { DocsContext } from "@contexts/DocsContext";
 import useCheckRoom from "@hooks/useCheckRoom";
 
-const cardsArray = [
-	makeCard("black", "wild"),
-	makeCard("blue", "2"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("blue", "3"),
-	makeCard("red", "3"),
-	makeCard("yellow", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "2"),
-	makeCard("green", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "5"),
-	makeCard("blue", "3"),
-	makeCard("red", "0"),
-	makeCard("red", "2"),
-	makeCard("red", "3"),
-	makeCard("green", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("yellow", "3"),
-	makeCard("yellow", "2plus"),
-];
+import {
+	AppBar,
+	Box,
+	CssBaseline,
+	Divider,
+	Drawer,
+	IconButton,
+	Link,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Toolbar,
+	Typography,
+} from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ShareIcon from "@mui/icons-material/Share";
+import MenuIcon from "@mui/icons-material/Menu";
+import Background from "@components/Background/Background";
+import GameArea from "@components/GameArea/GameArea";
+
+const drawerWidth = 240;
 
 interface RoomProps {}
 
@@ -46,6 +40,11 @@ const Room: FunctionComponent<RoomProps> = () => {
 	const roomId: string = roomParam ? roomParam : "-1";
 	const navigate = useNavigate();
 	const [docsContext] = useContext(DocsContext);
+	const [mobileOpen, setMobileOpen] = useState(false);
+
+	const handleDrawerToggle = () => {
+		setMobileOpen(!mobileOpen);
+	};
 
 	useCheckRoom(roomId, docsContext.room);
 	useEffect(() => {
@@ -60,18 +59,108 @@ const Room: FunctionComponent<RoomProps> = () => {
 		}
 	}, [docsContext, navigate, roomId]);
 
-	const [signOut] = useSignOut(auth);
-
-	const exitRoom = () => {};
+	const drawer = (
+		<div>
+			<Toolbar />
+			<Divider />
+			<List>
+				<ListItem disablePadding>
+					<ListItemButton>
+						<ListItemIcon>
+							<ShareIcon />
+						</ListItemIcon>
+						<ListItemText primary="Share Room" />
+					</ListItemButton>
+				</ListItem>
+			</List>
+			<Divider />
+			<List>
+				<ListItem disablePadding>
+					<ListItemButton component={Link} href="/">
+						<ListItemIcon>
+							<LogoutIcon />
+						</ListItemIcon>
+						<ListItemText primary="EXIT" />
+					</ListItemButton>
+				</ListItem>
+			</List>
+		</div>
+	);
 
 	return (
-		<div>
-			<button onClick={() => signOut()}> signout </button>
-			<button onClick={() => exitRoom()}> Exit room </button>
-			<button onClick={() => navigate("/")}> Home </button>
-			Room {roomId}
-			<PlayerCards cards={cardsArray} />
-		</div>
+		<Box sx={{ display: "flex" }}>
+			<CssBaseline />
+			<AppBar
+				position="fixed"
+				sx={{
+					width: { sm: `calc(100% - ${drawerWidth}px)` },
+					ml: { sm: `${drawerWidth}px` },
+				}}
+			>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						edge="start"
+						onClick={handleDrawerToggle}
+						sx={{ mr: 2, display: { sm: "none" } }}
+					>
+						<MenuIcon />
+					</IconButton>
+					<Typography variant="h6" noWrap component="div">
+						Uno Pow Zero
+					</Typography>
+				</Toolbar>
+			</AppBar>
+			<Box
+				component="nav"
+				sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+				aria-label="mailbox folders"
+			>
+				<Drawer
+					variant="temporary"
+					open={mobileOpen}
+					onClose={handleDrawerToggle}
+					ModalProps={{
+						keepMounted: true, // Better open performance on mobile.
+					}}
+					sx={{
+						display: { xs: "block", sm: "none" },
+						"& .MuiDrawer-paper": {
+							boxSizing: "border-box",
+							width: drawerWidth,
+						},
+					}}
+				>
+					{drawer}
+				</Drawer>
+				<Drawer
+					variant="permanent"
+					sx={{
+						display: { xs: "none", sm: "block" },
+						"& .MuiDrawer-paper": {
+							boxSizing: "border-box",
+							width: drawerWidth,
+						},
+					}}
+					open
+				>
+					{drawer}
+				</Drawer>
+			</Box>
+			<Box
+				component="main"
+				sx={{
+					flexGrow: 1,
+					p: 3,
+					width: drawerWidth,
+				}}
+			>
+				<Toolbar />
+				<GameArea roomId={roomId} />
+			</Box>
+			<Background />
+		</Box>
 	);
 };
 
