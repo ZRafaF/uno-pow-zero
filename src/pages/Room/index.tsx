@@ -31,6 +31,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import Background from "@components/Background/Background";
 import GameArea from "@components/GameArea/GameArea";
+import { toast } from "react-toastify";
 
 const drawerWidth = 240;
 
@@ -62,6 +63,7 @@ const Room: FunctionComponent<RoomProps> = () => {
 
 	const copyRoomKey = () => {
 		navigator.clipboard.writeText(roomId);
+		toast.success("Room key successfully copied!");
 	};
 
 	const drawer = (
@@ -161,15 +163,16 @@ const Room: FunctionComponent<RoomProps> = () => {
 					{drawer}
 				</Drawer>
 			</Box>
+
 			<Box
 				component="main"
 				sx={{
 					flexGrow: 1,
-					p: 3,
-					width: drawerWidth,
+					display: "flex",
+
+					justifyContent: "center",
 				}}
 			>
-				<Toolbar />
 				<GameArea roomId={roomId} />
 			</Box>
 			<Background />

@@ -1,0 +1,32 @@
+/**
+ * Copyright (c) 2023 Rafael Farias
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+.player_card_box {
+	aspect-ratio: 6 / 9;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.player_card_header {
+	background-color: #d3d3d3;
+	height: 20%;
+	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.player_card_body {
+	background-color: #ffffff;
+
+	height: 50%;
+}
+
+.player_card_footer {
+	box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+	background-color: #d3d3d3;
+	height: 30%;
+}

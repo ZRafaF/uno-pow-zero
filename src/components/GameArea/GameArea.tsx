@@ -3,13 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import PlayerCards from "@components/PlayerCards/PlayerCards";
-import { auth } from "@config/firebase";
+import CardsStack from "@components/CardsStack/CardsStack";
+import ProfileCardsArea from "@components/ProfileCardsArea/ProfileCardsArea";
 import { makeCard } from "@helper/cardHelper";
-import { Container } from "@mui/material";
-import React from "react";
+import { Box, Container, Toolbar } from "@mui/material";
 import { FunctionComponent } from "react";
+import GameCenter from "./GameCenter/GameCenter";
 import { useSignOut } from "react-firebase-hooks/auth";
+import { auth } from "@config/firebase";
 
 const cardsArray = [
 	makeCard("black", "wild"),
@@ -45,10 +46,45 @@ const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
 	const [signOut] = useSignOut(auth);
 
 	return (
-		<Container>
-			Room {roomId}
-			<button onClick={() => signOut()}> signout </button>
-			<PlayerCards cards={cardsArray} />
+		<Container
+			sx={{
+				display: "flex",
+				position: "absolute",
+				height: "stretch",
+				width: "stretch",
+				flexDirection: "column",
+				py: 2,
+				alignContent: "center",
+			}}
+		>
+			<Toolbar />
+			<div>
+				<button onClick={() => signOut()} style={{ width: "100px" }}>
+					Sign-out
+				</button>
+				Room {roomId}
+			</div>
+			<ProfileCardsArea />
+			<Box
+				justifyContent="space-around"
+				sx={{
+					display: "flex",
+					flexGrow: 2,
+					alignContent: "center",
+				}}
+			>
+				<GameCenter />
+			</Box>
+			<Box
+				sx={{
+					bottom: 0,
+					display: "flex",
+					justifyContent: "center",
+					alignContent: "center",
+				}}
+			>
+				<CardsStack cards={cardsArray} />
+			</Box>
 		</Container>
 	);
 };

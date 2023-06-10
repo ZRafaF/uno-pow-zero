@@ -7,6 +7,7 @@ import Card from "@Types/Card";
 import StyleModule from "./CardComp.module.css";
 import { getCardImage } from "@helper/cardHelper";
 import { FunctionComponent, useState } from "react";
+import { Box } from "@mui/material";
 
 interface CardCompProps {
 	card: Card;
@@ -16,7 +17,20 @@ const CardComp: FunctionComponent<CardCompProps> = ({ card }) => {
 	const [imageSrc] = useState<string>(getCardImage(card));
 
 	return (
-		<img src={imageSrc} alt={imageSrc} className={StyleModule.card_img} />
+		<Box
+			sx={{
+				width: {
+					xs: "80px",
+					md: "100px",
+					lg: "120px",
+				},
+				outlineColor: "primary",
+			}}
+			component="img"
+			alt={imageSrc}
+			src={imageSrc}
+			className={StyleModule.card_img}
+		/>
 	);
 };
 
