@@ -10,23 +10,29 @@ import { signInAnonymously } from "firebase/auth";
 import { auth } from "@config/firebase";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@emotion/react";
-import { createTheme } from "@mui/material";
+import { IconButton, createTheme } from "@mui/material";
 import PageNotFound from "@pages/PageNotFound";
 import UserIdContext, { userIdContextDefault } from "@contexts/UserIdContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@pages/Login";
 import DocsProvider from "@contexts/DocsContext";
 import RoomNotFound from "@pages/RoomNotFound";
-
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Background from "@components/Background/Background";
 signInAnonymously(auth).catch(alert);
 
 const darkTheme = createTheme({
 	palette: { mode: "dark" },
 });
+const lightTheme = createTheme({
+	palette: { mode: "light" },
+});
 
 function App() {
 	const [userIdContext, setUserIdContext] = useState(userIdContextDefault);
 	const [user] = useAuthState(auth);
+
+	const [darkModeIsOn, setDarkModeIsOn] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!user) {
@@ -36,8 +42,21 @@ function App() {
 		}
 	}, [user]);
 
+	const toggleTheme = () => {
+		setDarkModeIsOn(!darkModeIsOn);
+	};
+
 	return (
-		<ThemeProvider theme={darkTheme}>
+		<ThemeProvider theme={darkModeIsOn ? darkTheme : lightTheme}>
+			<IconButton
+				size="large"
+				sx={{ position: "fixed", right: 0, top: 0, zIndex: 9999 }}
+				onClick={toggleTheme}
+			>
+				<Brightness4Icon />
+			</IconButton>
+			<Background />
+
 			<UserIdContext.Provider value={[userIdContext, setUserIdContext]}>
 				<DocsProvider uid={userIdContext}>
 					<ToastContainer />

@@ -3,7 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import Background from "@components/Background/Background";
 import ChooseUsername from "@components/ChooseUsername/ChooseUsername";
 import { DocsContext } from "@contexts/DocsContext";
 import useCheckPlayer from "@hooks/useCheckPlayer";
@@ -23,7 +22,6 @@ const Login: FunctionComponent<LoginProps> = () => {
 
 	return (
 		<React.Fragment>
-			<Background />
 			<ChooseUsername roomId={roomId} />
 		</React.Fragment>
 	);

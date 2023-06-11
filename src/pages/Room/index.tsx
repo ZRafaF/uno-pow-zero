@@ -31,7 +31,6 @@ import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import Background from "@components/Background/Background";
 import GameArea from "@components/GameArea/GameArea";
 import { toast } from "react-toastify";
 import { useLongPress } from "use-long-press";
@@ -80,7 +79,16 @@ const Room: FunctionComponent<RoomProps> = () => {
 
 	const drawer = (
 		<div>
-			<Toolbar component={Paper} elevation={4}>
+			<Toolbar
+				component={Paper}
+				elevation={4}
+				sx={{
+					display: {
+						xs: "none",
+						sm: "flex",
+					},
+				}}
+			>
 				<Typography variant="h6">Uno Pow Zero</Typography>
 			</Toolbar>
 			<Toolbar {...bindLongPress()}>
@@ -203,7 +211,6 @@ const Room: FunctionComponent<RoomProps> = () => {
 			>
 				<GameArea roomId={roomId} />
 			</Box>
-			<Background />
 		</Box>
 	);
 };

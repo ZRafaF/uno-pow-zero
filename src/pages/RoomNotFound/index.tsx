@@ -3,7 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import Background from "@components/Background/Background";
 import React, { FunctionComponent } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -15,7 +14,6 @@ const RoomNotFound: FunctionComponent<RoomNotFoundProps> = () => {
 
 	return (
 		<React.Fragment>
-			<Background />
 			<h1>Room with key: {roomId} was not found</h1>
 			<Link to={"/"}>Home page</Link>
 		</React.Fragment>
