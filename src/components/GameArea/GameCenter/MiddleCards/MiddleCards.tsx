@@ -4,16 +4,15 @@
 // https://opensource.org/licenses/MIT
 
 import Card from "@Types/Card";
-import StyleModule from "./CardComp.module.css";
 import { getCardImage } from "@helper/cardHelper";
 import { FunctionComponent, useState } from "react";
 import { Box } from "@mui/material";
 
-interface CardCompProps {
+interface MiddleCardsProps {
 	card: Card;
 }
 
-const CardComp: FunctionComponent<CardCompProps> = ({ card }) => {
+const MiddleCards: FunctionComponent<MiddleCardsProps> = ({ card }) => {
 	const [imageSrc] = useState<string>(getCardImage(card));
 
 	return (
@@ -24,14 +23,12 @@ const CardComp: FunctionComponent<CardCompProps> = ({ card }) => {
 					md: "100px",
 					lg: "110px",
 				},
-				outlineColor: "primary",
 			}}
 			component="img"
 			alt={imageSrc}
 			src={imageSrc}
-			className={StyleModule.card_img}
 		/>
 	);
 };
 
-export default CardComp;
+export default MiddleCards;

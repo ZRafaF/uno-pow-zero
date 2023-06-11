@@ -21,17 +21,22 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
+	Slide,
 	Toolbar,
 	Typography,
+	useScrollTrigger,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import Background from "@components/Background/Background";
 import GameArea from "@components/GameArea/GameArea";
 import { toast } from "react-toastify";
+import { useLongPress } from "use-long-press";
+import { useSignOut } from "react-firebase-hooks/auth";
+import { auth } from "@config/firebase";
 
 const drawerWidth = 240;
 
@@ -43,6 +48,14 @@ const Room: FunctionComponent<RoomProps> = () => {
 	const navigate = useNavigate();
 	const [docsContext] = useContext(DocsContext);
 	const [mobileOpen, setMobileOpen] = useState(false);
+
+	const bindLongPress = useLongPress(() => {
+		copyRoomKey();
+	});
+
+	const [signOut] = useSignOut(auth);
+
+	const trigger = useScrollTrigger();
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -64,11 +77,16 @@ const Room: FunctionComponent<RoomProps> = () => {
 	const copyRoomKey = () => {
 		navigator.clipboard.writeText(roomId);
 		toast.success("Room key successfully copied!");
+		navigator.vibrate(200);
 	};
 
 	const drawer = (
 		<div>
-			<Toolbar />
+			<Toolbar {...bindLongPress()}>
+				<Typography variant="caption" display="block">
+					Room key: {roomId}
+				</Typography>
+			</Toolbar>
 			<Divider />
 			<List>
 				<ListItem disablePadding>
@@ -91,6 +109,14 @@ const Room: FunctionComponent<RoomProps> = () => {
 			<Divider />
 			<List>
 				<ListItem disablePadding>
+					<ListItemButton onClick={() => signOut()}>
+						<ListItemIcon>
+							<PersonRemoveIcon />
+						</ListItemIcon>
+						<ListItemText primary="Log out" />
+					</ListItemButton>
+				</ListItem>
+				<ListItem disablePadding>
 					<ListItem button component={Link} to={"/"}>
 						<ListItemIcon>
 							<LogoutIcon />
@@ -105,28 +131,31 @@ const Room: FunctionComponent<RoomProps> = () => {
 	return (
 		<Box sx={{ display: "flex" }}>
 			<CssBaseline />
-			<AppBar
-				position="fixed"
-				sx={{
-					width: { sm: `calc(100% - ${drawerWidth}px)` },
-					ml: { sm: `${drawerWidth}px` },
-				}}
-			>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						edge="start"
-						onClick={handleDrawerToggle}
-						sx={{ mr: 2, display: { sm: "none" } }}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography variant="h6" noWrap component="div">
-						Uno Pow Zero
-					</Typography>
-				</Toolbar>
-			</AppBar>
+			<Slide appear={false} direction="down" in={!trigger}>
+				<AppBar
+					position="fixed"
+					sx={{
+						width: { sm: `calc(100% - ${drawerWidth}px)` },
+						ml: { sm: `${drawerWidth}px` },
+					}}
+				>
+					<Toolbar>
+						<IconButton
+							color="inherit"
+							aria-label="open drawer"
+							edge="start"
+							onClick={handleDrawerToggle}
+							sx={{ mr: 2, display: { sm: "none" } }}
+						>
+							<MenuIcon />
+						</IconButton>
+						<Typography variant="h6" noWrap component="div">
+							Uno Pow Zero
+						</Typography>
+					</Toolbar>
+				</AppBar>
+			</Slide>
+
 			<Box
 				component="nav"
 				sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

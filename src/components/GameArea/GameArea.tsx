@@ -9,8 +9,6 @@ import { makeCard } from "@helper/cardHelper";
 import { Box, Container, Toolbar } from "@mui/material";
 import { FunctionComponent } from "react";
 import GameCenter from "./GameCenter/GameCenter";
-import { useSignOut } from "react-firebase-hooks/auth";
-import { auth } from "@config/firebase";
 
 const cardsArray = [
 	makeCard("black", "wild"),
@@ -43,8 +41,6 @@ interface GameAreaProps {
 }
 
 const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
-	const [signOut] = useSignOut(auth);
-
 	return (
 		<Container
 			sx={{
@@ -58,12 +54,7 @@ const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
 			}}
 		>
 			<Toolbar />
-			<div>
-				<button onClick={() => signOut()} style={{ width: "100px" }}>
-					Sign-out
-				</button>
-				Room {roomId}
-			</div>
+
 			<ProfileCardsArea />
 			<Box
 				justifyContent="space-around"
