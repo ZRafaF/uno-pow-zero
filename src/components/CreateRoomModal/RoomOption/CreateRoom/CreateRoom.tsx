@@ -5,8 +5,7 @@
 
 import { FunctionComponent, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { auth, availableRoomsRef, db, roomsRef } from "@config/firebase";
-import { signInAnonymously } from "firebase/auth";
+import { availableRoomsRef, db, roomsRef } from "@config/firebase";
 import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
 import {
 	addDoc,
@@ -81,20 +80,17 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 	const createRoom = async () => {
 		setCreateLoading(true);
 		try {
-			signInAnonymously(auth).then((userSign) => {
-				const creatorUid = userSign.user.uid;
-				const newRoom: RoomDoc = {
-					uid: creatorUid,
-					currentCard: { color: "black", type: "wild" },
-					currentPlayerUid: "",
-					currentDirection: "cw",
-					players: [],
-					roomId: "",
-				};
+			const newRoom: RoomDoc = {
+				uid: userIdContext,
+				currentCard: { color: "black", type: "wild" },
+				currentPlayerUid: "",
+				currentDirection: "cw",
+				players: [],
+				roomId: "",
+			};
 
-				updateOtherRooms(creatorUid).then(() => {
-					addRoomDoc(newRoom);
-				});
+			updateOtherRooms(userIdContext).then(() => {
+				addRoomDoc(newRoom);
 			});
 		} catch (err) {
 			toast.error("Something went wrong");

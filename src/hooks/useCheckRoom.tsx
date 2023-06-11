@@ -3,25 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
-import { AvailableRoomsCTX, RoomCTX } from "@Types/DocsCTX";
+import { AvailableRoomDoc } from "@Types/DocTypes";
 import { availableRoomsRef } from "@config/firebase";
 import { getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const checkIfRoomIsValid = (
-	availableRooms: AvailableRoomDoc[],
-	roomId: string
-): boolean => {
-	let res = false;
-
-	availableRooms.forEach((element) => {
-		if (element.roomId === roomId) res = true;
-	});
-
-	return res;
-};
 
 const useCheckRoom = (roomId: string, callback?: Function) => {
 	const navigate = useNavigate();

@@ -5,12 +5,7 @@
 
 import { DocsContext } from "@contexts/DocsContext";
 import useCheckRoom from "@hooks/useCheckRoom";
-import React, {
-	FunctionComponent,
-	ReactNode,
-	useContext,
-	useEffect,
-} from "react";
+import React, { FunctionComponent, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface RoomLandingProps {

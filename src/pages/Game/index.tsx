@@ -3,11 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent, useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-
-import { DocsContext } from "@contexts/DocsContext";
-import useCheckRoom from "@hooks/useCheckRoom";
+import { FunctionComponent, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import {
 	AppBar,
@@ -44,8 +41,6 @@ interface GameProps {}
 const Game: FunctionComponent<GameProps> = () => {
 	const roomParam = useParams().roomId;
 	const roomId: string = roomParam ? roomParam : "-1";
-	const navigate = useNavigate();
-	const [docsContext] = useContext(DocsContext);
 	const [mobileOpen, setMobileOpen] = useState(false);
 
 	const bindLongPress = useLongPress(() => {

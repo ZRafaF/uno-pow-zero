@@ -15,7 +15,6 @@ import PageNotFound from "@pages/PageNotFound";
 import UserIdContext, { userIdContextDefault } from "@contexts/UserIdContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "@pages/Login";
-import DocsProvider from "@contexts/DocsContext";
 import RoomNotFound from "@pages/RoomNotFound";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Background from "@components/Background/Background";

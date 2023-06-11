@@ -6,7 +6,6 @@
 import RoomLanding from "@components/RoomLanding/RoomLanding";
 import DocsProvider from "@contexts/DocsContext";
 import UserIdContext from "@contexts/UserIdContext";
-import useCheckRoom from "@hooks/useCheckRoom";
 import { FunctionComponent, useContext } from "react";
 import { Outlet, useParams } from "react-router-dom";
 
