@@ -21,8 +21,3 @@ export interface RoomDoc {
 	players: Player[];
 	roomId: string;
 }
-
-export interface AvailableRoomDoc {
-	uid: string;
-	roomId: string;
-}

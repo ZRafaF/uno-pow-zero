@@ -28,4 +28,3 @@ export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
 
 export const roomsRef = collection(db, "rooms");
-export const availableRoomsRef = collection(db, "availableRooms");
