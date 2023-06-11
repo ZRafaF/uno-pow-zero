@@ -32,7 +32,10 @@ const CardPile: FunctionComponent<CardPileProps> = () => {
 	};
 
 	return (
-		<CardComp card={makeCard("black", "0")} callbackFunc={getRandomCard} />
+		<CardComp
+			card={makeCard("card_back", "")}
+			callbackFunc={getRandomCard}
+		/>
 	);
 };
 

@@ -19,6 +19,12 @@ export function getCardImage(card: Card) {
 			"/assets/Uno/individual/card_back/card_back.png"
 		);
 	}
+	if (card.color === "card_back") {
+		return (
+			process.env.PUBLIC_URL +
+			"/assets/Uno/individual/card_back/card_back.png"
+		);
+	}
 	const imgPath =
 		process.env.PUBLIC_URL +
 		`/assets/Uno/individual/${card.color}/${card.type}_${card.color}.png`;

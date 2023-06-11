@@ -24,7 +24,7 @@ interface DocsContextProps {
 const docsContextDefault: DocsContextProps = {
 	room: {
 		doc: {
-			currentCard: { color: "green", type: "0" },
+			currentCard: { color: "card_back", type: "" },
 			currentDirection: "cw",
 			currentPlayerUid: "",
 			players: [],

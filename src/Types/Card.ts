@@ -3,7 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-export type CardColor = "blue" | "green" | "red" | "yellow" | "black";
+export type CardColor =
+	| "blue"
+	| "green"
+	| "red"
+	| "yellow"
+	| "black"
+	| "card_back";
 
 export type CardType =
 	| "0"
@@ -20,7 +26,8 @@ export type CardType =
 	| "inverse"
 	| "2plus"
 	| "wild"
-	| "4plus";
+	| "4plus"
+	| "";
 
 interface Card {
 	color: CardColor;

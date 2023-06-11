@@ -5,15 +5,20 @@
 
 import CardsStack from "@components/CardsStack/CardsStack";
 import ProfileCardsArea from "@components/ProfileCardsArea/ProfileCardsArea";
-import { Box, Container, Toolbar } from "@mui/material";
-import { FunctionComponent } from "react";
+import { Box, Container, Modal, Toolbar } from "@mui/material";
+import { FunctionComponent, useState } from "react";
 import GameCenter from "./GameCenter/GameCenter";
+import StartingGameModal from "./StartingGameModal/StartingGameModal";
 
 interface GameAreaProps {
 	roomId: string;
 }
 
 const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
+	const [open, setOpen] = useState(true);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+
 	return (
 		<Container
 			sx={{
@@ -31,6 +36,8 @@ const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
 					display: { sm: "none" },
 				}}
 			/>
+
+			<StartingGameModal open={open} handleClose={handleClose} />
 
 			<ProfileCardsArea />
 			<Box

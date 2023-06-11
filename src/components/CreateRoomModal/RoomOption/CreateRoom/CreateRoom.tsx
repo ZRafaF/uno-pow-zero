@@ -67,7 +67,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 		try {
 			const newRoom: RoomDoc = {
 				uid: userIdContext,
-				currentCard: { color: "black", type: "wild" },
+				currentCard: { color: "card_back", type: "" },
 				currentPlayerUid: "",
 				currentDirection: "cw",
 				players: [],

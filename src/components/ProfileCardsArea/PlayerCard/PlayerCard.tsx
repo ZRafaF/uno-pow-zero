@@ -5,8 +5,9 @@
 
 import { FunctionComponent } from "react";
 import StyleModule from "./PlayerCard.module.css";
-import { Avatar, Box, Stack } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { Player } from "@Types/DocTypes";
+import CardFooter from "./CardFooter/CardFooter";
 
 interface PlayerCardProps {
 	profile: Player;
@@ -17,26 +18,26 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = ({ profile }) => {
 		<Box
 			className={StyleModule.player_card_box}
 			sx={{
-				minWidth: {
-					xs: "65px",
-					md: "75px",
+				width: {
+					xs: "60px",
+					sm: "65px",
+					md: "70px",
 					lg: "80px",
 				},
-				minHeight: {
-					xs: "80px",
-					md: "85px",
-					lg: "95px",
+				height: {
+					xs: "87px",
+					sm: "95px",
+					md: "105px",
+					lg: "110px",
 				},
 				backgroundColor: "grey.300",
 				boxShadow: 3,
 			}}
 		>
-			<Box
-				sx={{ backgroundColor: "grey.800" }}
-				color={"white"}
-				textAlign={"center"}
-			>
-				{profile.username}
+			<Box sx={{ backgroundColor: "grey.800" }}>
+				<Typography noWrap color={"white"} textAlign={"center"}>
+					{profile.username}
+				</Typography>
 			</Box>
 			<Stack
 				sx={{
@@ -64,7 +65,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = ({ profile }) => {
 				/>
 			</Stack>
 			<Box color={"black"} textAlign={"center"}>
-				{profile.cards.length}
+				<CardFooter numberOfCards={profile.cards.length} />
 			</Box>
 		</Box>
 	);
