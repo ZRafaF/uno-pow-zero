@@ -21,4 +21,5 @@ export interface RoomDoc {
 	players: Player[];
 	lastCards: Card[];
 	roomId: string;
+	started: boolean;
 }

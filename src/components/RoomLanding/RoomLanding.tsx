@@ -72,8 +72,13 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 				if (uid === element.uid) foundPlayer = true;
 			});
 
-			const targetRoom = foundPlayer ? "game" : "login";
-			navigate("/" + roomId + "/" + targetRoom);
+			if (!foundPlayer) {
+				navigate("/" + roomId + "/login");
+			} else if (docsContext.room.doc.started) {
+				navigate("/" + roomId + "/game");
+			} else {
+				navigate("/" + roomId + "/waiting");
+			}
 		}
 	}, [roomId, navigate, docsContext, uid, isRoomIdValid]);
 
@@ -147,7 +152,13 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 			<Divider />
 			<List>
 				<ListItem disablePadding>
-					<ListItemButton onClick={() => signOut()}>
+					<ListItemButton
+						onClick={() => {
+							signOut().then(() => {
+								navigate("/");
+							});
+						}}
+					>
 						<ListItemIcon>
 							<PersonRemoveIcon />
 						</ListItemIcon>

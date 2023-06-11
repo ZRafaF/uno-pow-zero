@@ -17,6 +17,7 @@ import RoomNotFound from "@pages/RoomNotFound";
 import Background from "@components/Background/Background";
 import Room from "@pages/Room";
 import { ThemeSelectorProvider } from "@contexts/ThemeSelectorContext";
+import Waiting from "@pages/Waiting";
 signInAnonymously(auth).catch(alert);
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
 						<Route path="/:roomId" element={<Room />}>
 							<Route path="game" element={<Game />} />
 							<Route path="login" element={<Login />} />
+							<Route path="waiting" element={<Waiting />} />
 							<Route path="404" element={<RoomNotFound />} />
 						</Route>
 						<Route path="*" element={<PageNotFound />} />

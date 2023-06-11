@@ -31,6 +31,7 @@ const docsContextDefault: DocsContextProps = {
 			lastCards: [],
 			roomId: "",
 			uid: "",
+			started: false,
 		},
 		loading: false,
 	},

@@ -73,6 +73,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 				players: [],
 				lastCards: [],
 				roomId: "",
+				started: false,
 			};
 
 			updateOtherRooms(userIdContext).then(() => {

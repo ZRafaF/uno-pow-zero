@@ -32,7 +32,7 @@ export function getCardImage(card: Card) {
 	return imgPath;
 }
 
-function getRndInteger(min: number, max: number) {
+export function getRndInteger(min: number, max: number) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
@@ -80,11 +80,36 @@ const possibleTypes: CardType[] = [
 	"inverse",
 ];
 
+const possibleStartingTypes: CardType[] = [
+	"0",
+	"1",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+];
+
 export function makeRandomCard() {
 	const cardColor = possibleColors[getRndInteger(0, possibleColors.length)];
 	const cardType =
 		cardColor === "black"
 			? possibleTypesBlack[getRndInteger(0, possibleTypesBlack.length)]
 			: possibleTypes[getRndInteger(0, possibleTypes.length)];
+	return makeCard(cardColor, cardType);
+}
+
+export function makeStartingCard() {
+	let cardColor = possibleColors[getRndInteger(0, possibleColors.length)];
+
+	if (cardColor === "black") {
+		cardColor = "blue";
+	}
+
+	const cardType =
+		possibleStartingTypes[getRndInteger(0, possibleStartingTypes.length)];
 	return makeCard(cardColor, cardType);
 }
