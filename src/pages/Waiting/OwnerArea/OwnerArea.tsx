@@ -10,7 +10,19 @@ import React, {
 	ChangeEvent,
 } from "react";
 
-import { Avatar, Box, Grid, TextField, Typography } from "@mui/material";
+import {
+	Avatar,
+	Box,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Grid,
+	TextField,
+	Typography,
+} from "@mui/material";
 import { toast } from "react-toastify";
 import { db } from "@config/firebase";
 import { LoadingButton } from "@mui/lab";
@@ -23,32 +35,68 @@ import {
 } from "@helper/cardHelper";
 import Card from "@Types/Card";
 import { doc, updateDoc } from "firebase/firestore";
+
+const startingNumberOfCards: number = 7;
+
 interface OwnerAreaProps {}
 
 const OwnerArea: FunctionComponent<OwnerAreaProps> = () => {
 	const [sending, setSending] = useState<boolean>(false);
+	const [numberOfCards, setNumberOfCards] = useState<number>(
+		startingNumberOfCards
+	);
 	const [validCardNumber, setValidCardNumber] = useState<boolean>(true);
 	const [helperText, setHelperText] = useState<string>("");
 	const [docsContext] = useContext(DocsContext);
 
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		const numberOfCards = data.get("numberOfCards") as string;
+	const [open, setOpen] = useState(false);
 
-		if (!numberOfCards) {
-			toast.error("Number of cards");
-			return;
-		}
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const confirmDialogue = (
+		<Dialog
+			open={open}
+			onClose={handleClose}
+			aria-labelledby="alert-dialog-title"
+			aria-describedby="alert-dialog-description"
+		>
+			<DialogTitle id="alert-dialog-title">Create room?</DialogTitle>
+			<DialogContent>
+				<DialogContentText id="alert-dialog-description">
+					After starting no other player will be able to log to the
+					room.
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={handleClose}>Cancel</Button>
+				<Button
+					variant="contained"
+					onClick={() => {
+						startGame();
+						handleClose();
+					}}
+					autoFocus
+				>
+					Confirm
+				</Button>
+			</DialogActions>
+		</Dialog>
+	);
+
+	const startGame = () => {
 		setSending(true);
-
-		const intNumberOfCards = parseInt(numberOfCards);
 
 		let newPlayersArray = [...docsContext.room.doc.players];
 
 		newPlayersArray.forEach((element) => {
 			const randomCards: Card[] = [];
-			for (let i = 0; i < intNumberOfCards; i++) {
+			for (let i = 0; i < numberOfCards; i++) {
 				randomCards.push(makeRandomCard());
 			}
 			element.cards = randomCards;
@@ -71,6 +119,19 @@ const OwnerArea: FunctionComponent<OwnerAreaProps> = () => {
 			toast.error("Something went wrong");
 			setSending(false);
 		}
+	};
+
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const data = new FormData(event.currentTarget);
+		const numberOfCardsText = data.get("numberOfCards") as string;
+
+		if (!numberOfCards) {
+			toast.error("Number of cards");
+			return;
+		}
+		setNumberOfCards(parseInt(numberOfCardsText));
+		handleClickOpen();
 	};
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const textValue = event.target.value;
@@ -126,7 +187,7 @@ const OwnerArea: FunctionComponent<OwnerAreaProps> = () => {
 							type="number"
 							onChange={handleChange}
 							helperText={helperText}
-							defaultValue={7}
+							defaultValue={startingNumberOfCards}
 							error={!validCardNumber}
 						/>
 					</Grid>
@@ -145,6 +206,7 @@ const OwnerArea: FunctionComponent<OwnerAreaProps> = () => {
 					</Grid>
 				</Grid>
 			</Box>
+			{confirmDialogue}
 		</React.Fragment>
 	);
 };

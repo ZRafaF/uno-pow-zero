@@ -7,6 +7,7 @@ import { DocsContext } from "@contexts/DocsContext";
 import useCheckRoom from "@hooks/useCheckRoom";
 import React, {
 	FunctionComponent,
+	ReactElement,
 	ReactNode,
 	useContext,
 	useEffect,
@@ -16,6 +17,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 import {
 	AppBar,
+	Avatar,
+	AvatarGroup,
 	Box,
 	Container,
 	CssBaseline,
@@ -38,11 +41,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { toast } from "react-toastify";
-import { useLongPress } from "use-long-press";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { auth } from "@config/firebase";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import { ThemeSelectorContext } from "@contexts/ThemeSelectorContext";
+import QrCodeListItem from "@pages/Waiting/OwnerArea/QrCodeListItem/QrCodeListItem";
 
 const drawerWidth = 240;
 
@@ -84,10 +87,6 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 
 	const [mobileOpen, setMobileOpen] = useState(false);
 
-	const bindLongPress = useLongPress(() => {
-		copyRoomKey();
-	});
-
 	const [signOut] = useSignOut(auth);
 
 	const handleDrawerToggle = () => {
@@ -97,6 +96,25 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 	const copyRoomKey = () => {
 		navigator.clipboard.writeText(roomId);
 		toast.success("Room key successfully copied!");
+	};
+
+	const makeAvatars: Function = (): ReactElement[] => {
+		try {
+			return docsContext.room.doc.players.map((player, idx) => {
+				return (
+					<Avatar
+						alt={player?.username}
+						key={`profile_${player?.username + idx}`}
+						src={
+							process.env.PUBLIC_URL +
+							`/assets/ProfileAnimals/${player?.pfp}.png`
+						}
+					/>
+				);
+			});
+		} catch (error) {
+			return [];
+		}
 	};
 
 	const drawer = (
@@ -113,20 +131,35 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 			>
 				<Typography variant="h6">Uno Pow Zero</Typography>
 			</Toolbar>
-			<Toolbar {...bindLongPress()}>
+
+			<Toolbar>
 				<Typography variant="caption" display="block">
 					Room key: {roomId}
 				</Typography>
 			</Toolbar>
+
+			<Toolbar>
+				<AvatarGroup max={4}>{makeAvatars()}</AvatarGroup>
+			</Toolbar>
 			<Divider />
+
 			<List>
 				<ListItem disablePadding>
-					<ListItem button>
+					<ListItemButton
+						onClick={() => {
+							const shareData: ShareData = {
+								title: "Uno Pow Zero",
+								text: "Let's play a ⁿᵒᵗ uno game?",
+								url: window.location.href,
+							};
+							navigator.share(shareData);
+						}}
+					>
 						<ListItemIcon>
 							<ShareIcon />
 						</ListItemIcon>
 						<ListItemText primary="Share Room" />
-					</ListItem>
+					</ListItemButton>
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={copyRoomKey}>
@@ -136,6 +169,7 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 						<ListItemText primary="Copy key" />
 					</ListItemButton>
 				</ListItem>
+				<QrCodeListItem />
 				<ListItem disablePadding>
 					<ListItemButton
 						onClick={() => {
@@ -149,7 +183,9 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 					</ListItemButton>
 				</ListItem>
 			</List>
+
 			<Divider />
+
 			<List>
 				<ListItem disablePadding>
 					<ListItemButton
