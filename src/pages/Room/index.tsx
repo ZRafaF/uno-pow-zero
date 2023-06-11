@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import RoomLanding from "@components/RoomLanding/RoomLanding";
-import DocsProvider from "@contexts/DocsContext";
+import { DocsProvider } from "@contexts/DocsContext";
 import UserIdContext from "@contexts/UserIdContext";
 import { FunctionComponent, useContext } from "react";
 import { Outlet, useParams } from "react-router-dom";
@@ -19,9 +19,9 @@ const Room: FunctionComponent<RoomProps> = () => {
 
 	return (
 		<DocsProvider uid={userIdContext} roomId={roomId}>
-			<RoomLanding roomId={roomId} uid={userIdContext} />
-
-			<Outlet />
+			<RoomLanding roomId={roomId} uid={userIdContext}>
+				<Outlet />
+			</RoomLanding>
 		</DocsProvider>
 	);
 };

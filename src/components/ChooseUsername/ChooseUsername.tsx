@@ -3,14 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 import React, { FunctionComponent, useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 import {
 	Avatar,
 	Box,
 	Container,
-	Grid,
-	Link,
 	Paper,
 	TextField,
 	Typography,
@@ -89,7 +86,7 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 		<Container component="main" maxWidth="sm">
 			<Box
 				sx={{
-					my: 8,
+					mb: 2,
 				}}
 			>
 				<Paper
@@ -140,13 +137,6 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 						>
 							Next
 						</LoadingButton>
-						<Grid container>
-							<Grid item xs>
-								<Link component={RouterLink} to="/">
-									Return Home
-								</Link>
-							</Grid>
-						</Grid>
 					</Box>
 				</Paper>
 			</Box>

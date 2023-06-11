@@ -46,7 +46,7 @@ interface DocsProviderProps {
 	uid: string;
 }
 
-const DocsProvider: FunctionComponent<DocsProviderProps> = ({
+export const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 	children,
 	roomId,
 }) => {
@@ -79,5 +79,3 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 		</DocsContext.Provider>
 	);
 };
-
-export default DocsProvider;
