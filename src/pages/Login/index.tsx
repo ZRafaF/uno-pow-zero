@@ -4,10 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import ChooseUsername from "@components/ChooseUsername/ChooseUsername";
-import { DocsContext } from "@contexts/DocsContext";
-import useCheckPlayer from "@hooks/useCheckPlayer";
-//import useCheckRoom from "@hooks/useCheckRoom";
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent } from "react";
 import { useParams } from "react-router-dom";
 
 interface LoginProps {}
@@ -15,10 +12,6 @@ interface LoginProps {}
 const Login: FunctionComponent<LoginProps> = () => {
 	const roomParam = useParams().roomId;
 	const roomId: string = roomParam ? roomParam : "";
-	const [docsContext] = useContext(DocsContext);
-
-	//useCheckRoom(roomId, docsContext.room);
-	useCheckPlayer(roomId, docsContext.player, docsContext.room);
 
 	return (
 		<React.Fragment>

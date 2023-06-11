@@ -3,11 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { auth, db, roomsRef } from "@config/firebase";
-import { signInAnonymously } from "firebase/auth";
-import { RoomDoc } from "@Types/DocTypes";
+import { availableRoomsRef, db, roomsRef } from "@config/firebase";
+import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
 import {
 	addDoc,
 	deleteDoc,
@@ -27,19 +26,23 @@ import {
 import { LoadingButton } from "@mui/lab";
 
 import { useNavigate } from "react-router-dom";
+import UserIdContext from "@contexts/UserIdContext";
 
 interface CreateRoomProps {}
 
 const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 	const [createLoading, setCreateLoading] = useState<boolean>(false);
+	const [userIdContext] = useContext(UserIdContext);
 	const navigate = useNavigate();
 
 	const updateOtherRooms = async (uid: string) => {
-		const q = query(roomsRef, where("creatorUid", "==", uid));
+		const q = query(availableRoomsRef, where("uid", "==", uid));
 		const querySnapshot = await getDocs(q);
-		querySnapshot.forEach((roomDoc) => {
-			const roomTyped = roomDoc.data() as RoomDoc;
-			deleteDoc(doc(db, "rooms", roomTyped.roomId));
+		querySnapshot.forEach((availableRoomDoc) => {
+			const availableRoomTyped =
+				availableRoomDoc.data() as AvailableRoomDoc;
+			deleteDoc(doc(db, "rooms", availableRoomTyped.roomId));
+			deleteDoc(doc(db, "availableRooms", availableRoomDoc.id));
 		});
 	};
 
@@ -47,11 +50,24 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 		try {
 			addDoc(roomsRef, newRoom).then((res) => {
 				const roomId = res.id;
-				updateDoc(doc(db, "rooms", roomId), {
+				const newAvailableRoom: AvailableRoomDoc = {
 					roomId: roomId,
-				}).then(() => {
-					navigate("/" + roomId + "/login");
-				});
+					uid: userIdContext,
+				};
+				addDoc(availableRoomsRef, newAvailableRoom).then(
+					(availableRes) => {
+						const availableRoomId = availableRes.id;
+						updateDoc(doc(db, "availableRooms", availableRoomId), {
+							roomId: roomId,
+						});
+
+						updateDoc(doc(db, "rooms", roomId), {
+							roomId: roomId,
+						}).then(() => {
+							navigate("/" + roomId);
+						});
+					}
+				);
 			});
 		} catch (err) {
 			toast.error("Something went wrong");
@@ -64,20 +80,17 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 	const createRoom = async () => {
 		setCreateLoading(true);
 		try {
-			signInAnonymously(auth).then((userSign) => {
-				const creatorUid = userSign.user.uid;
-				const newRoom: RoomDoc = {
-					uid: creatorUid,
-					currentCard: { color: "black", type: "wild" },
-					currentPlayerUid: "",
-					currentDirection: "cw",
-					playersUid: [creatorUid],
-					roomId: "",
-				};
+			const newRoom: RoomDoc = {
+				uid: userIdContext,
+				currentCard: { color: "black", type: "wild" },
+				currentPlayerUid: "",
+				currentDirection: "cw",
+				players: [],
+				roomId: "",
+			};
 
-				updateOtherRooms(creatorUid).then(() => {
-					addRoomDoc(newRoom);
-				});
+			updateOtherRooms(userIdContext).then(() => {
+				addRoomDoc(newRoom);
 			});
 		} catch (err) {
 			toast.error("Something went wrong");

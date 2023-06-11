@@ -17,38 +17,36 @@ import {
 } from "@mui/material";
 import PfpPicker from "./PfpPicker/PfpPicker";
 import { toast } from "react-toastify";
-import { auth, db, playersRef } from "@config/firebase";
-import { signInAnonymously } from "firebase/auth";
+import { db } from "@config/firebase";
 import { LoadingButton } from "@mui/lab";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { PlayerDoc } from "@Types/DocTypes";
-import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { Player } from "@Types/DocTypes";
+import { doc, updateDoc } from "firebase/firestore";
 import { DocsContext } from "@contexts/DocsContext";
+import UserIdContext from "@contexts/UserIdContext";
 
 interface ChooseUsernameProps {
 	roomId: string;
 }
 
 const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
+	const [userIdContext] = useContext(UserIdContext);
 	const [docsContext] = useContext(DocsContext);
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
 
-	const updateOthersPlayerInstances = async (newPlayer: PlayerDoc) => {
-		await docsContext.player.docs.forEach(async (playerDoc) => {
-			await deleteDoc(doc(db, "players", playerDoc.playerDocId));
-		});
-	};
-
-	const createPlayer = async (newPlayer: PlayerDoc) => {
-		await updateOthersPlayerInstances(newPlayer).then(() => {
-			addDoc(playersRef, newPlayer).then((res) => {
-				const playerDocId = res.id;
-				updateDoc(doc(db, "players", playerDocId), {
-					playerDocId: playerDocId,
-				});
+	const createPlayer = async (newPlayer: Player) => {
+		let newPlayersArray = [...docsContext.room.doc.players];
+		newPlayersArray.push(newPlayer);
+		updateDoc(doc(db, "rooms", docsContext.room.doc.roomId), {
+			players: newPlayersArray,
+		})
+			.then(() => {
+				setSending(true);
+			})
+			.catch((err) => {
+				console.error(err);
 			});
-		});
 	};
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,21 +61,23 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 			toast.error("Invalid profile picture!");
 			return;
 		}
+		if (docsContext.room.loading) {
+			toast.error("Something went wrong!");
+			return;
+		}
 		setSending(true);
 
 		try {
-			signInAnonymously(auth).then((res) => {
-				const uid = res.user.uid;
-				const newPlayer: PlayerDoc = {
-					roomId: roomId,
-					cardsDocId: "",
-					pfp: currentPfp,
-					playerDocId: "",
-					uid: uid,
-					username: username,
-				};
-				createPlayer(newPlayer);
-			});
+			const uid = userIdContext;
+			const newPlayer: Player = {
+				roomId: roomId,
+				cards: [],
+				pfp: currentPfp,
+				playerDocId: "",
+				uid: uid,
+				username: username,
+			};
+			createPlayer(newPlayer);
 		} catch (err) {
 			toast.error("Something went wrong");
 			console.error(err);

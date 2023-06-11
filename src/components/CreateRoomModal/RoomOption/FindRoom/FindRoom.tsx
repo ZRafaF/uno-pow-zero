@@ -33,7 +33,7 @@ const FindRoom: FunctionComponent<FindRoomProps> = () => {
 			toast.error("Invalid room key!");
 			return;
 		}
-		navigate("/" + roomKey + "/room");
+		navigate("/" + roomKey);
 	};
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

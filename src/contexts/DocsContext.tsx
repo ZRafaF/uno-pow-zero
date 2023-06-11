@@ -3,10 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { PlayerDoc, RoomDoc, CardsDoc } from "@Types/DocTypes";
-import { CardsCTX, PlayerCTX, RoomCTX } from "@Types/DocsCTX";
-import { cardsRef, playersRef, roomsRef } from "@config/firebase";
-import { query, where } from "firebase/firestore";
+import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
+import { AvailableRoomsCTX, RoomCTX } from "@Types/DocsCTX";
+import { availableRoomsRef, db } from "@config/firebase";
+import { doc, query } from "firebase/firestore";
 import {
 	createContext,
 	Dispatch,
@@ -15,18 +15,26 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { useCollectionOnce, useDocument } from "react-firebase-hooks/firestore";
 
 interface DocsContextProps {
-	player: PlayerCTX;
 	room: RoomCTX;
-	cards: CardsCTX;
+	availableRooms: AvailableRoomsCTX;
 }
 
 const docsContextDefault: DocsContextProps = {
-	player: { docs: [], loading: false },
-	room: { docs: [], loading: false },
-	cards: { docs: [], loading: false },
+	room: {
+		doc: {
+			currentCard: { color: "green", type: "0" },
+			currentDirection: "cw",
+			currentPlayerUid: "",
+			players: [],
+			roomId: "",
+			uid: "",
+		},
+		loading: false,
+	},
+	availableRooms: { docs: [], loading: false },
 };
 
 export const DocsContext = createContext<
@@ -35,77 +43,56 @@ export const DocsContext = createContext<
 
 interface DocsProviderProps {
 	children: any;
+	roomId: string;
 	uid: string;
 }
 
 const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 	children,
-	uid,
+	roomId,
 }) => {
 	const [docsContext, setDocsContext] = useState(docsContextDefault);
-	const playerDocQuery = query(playersRef, where("uid", "==", uid));
-	const roomDocQuery = query(roomsRef);
-	const cardsDocQuery = query(cardsRef, where("uid", "==", uid));
-	const [playersSnapshot, playersLoading] = useCollection(playerDocQuery);
-	const [roomsSnapshot, roomsLoading] = useCollection(roomDocQuery);
-	const [cardsSnapshot, cardsLoading] = useCollection(cardsDocQuery);
+
+	const [roomSnapshot, roomLoading] = useDocument(doc(db, "rooms", roomId));
+
+	const availableRoomsDocQuery = query(availableRoomsRef);
+	const [availableRoomsSnapshot, availableRoomsLoading] = useCollectionOnce(
+		availableRoomsDocQuery
+	);
 
 	useEffect(() => {
-		if (playersSnapshot === undefined) return;
-		const playerArray: PlayerDoc[] = [];
-		playersSnapshot.forEach((doc) => {
-			playerArray.push(doc.data() as PlayerDoc);
-		});
-
-		setDocsContext((prevDoc) => {
-			const newValue: PlayerCTX = {
-				docs: playerArray,
-				loading: playersLoading,
-			};
-			return {
-				...prevDoc,
-				player: newValue,
-			};
-		});
-	}, [playersSnapshot, setDocsContext, playersLoading]);
-
-	useEffect(() => {
-		if (roomsSnapshot === undefined) return;
-		const roomArray: RoomDoc[] = [];
-		roomsSnapshot.forEach((doc) => {
-			roomArray.push(doc.data() as RoomDoc);
-		});
+		if (roomSnapshot === undefined) return;
 
 		setDocsContext((prevDoc) => {
 			const newValue: RoomCTX = {
-				docs: roomArray,
-				loading: roomsLoading,
+				doc: roomSnapshot.data() as RoomDoc,
+				loading: roomLoading,
 			};
 			return {
 				...prevDoc,
 				room: newValue,
 			};
 		});
-	}, [roomsSnapshot, setDocsContext, roomsLoading]);
+	}, [roomSnapshot, setDocsContext, roomLoading]);
 
 	useEffect(() => {
-		if (cardsSnapshot === undefined) return;
-		const cardsArray: CardsDoc[] = [];
-		cardsSnapshot.forEach((doc) => {
-			cardsArray.push(doc.data() as CardsDoc);
+		if (availableRoomsSnapshot === undefined) return;
+		const availableRoomsArray: AvailableRoomDoc[] = [];
+		availableRoomsSnapshot.forEach((doc) => {
+			availableRoomsArray.push(doc.data() as AvailableRoomDoc);
 		});
 
 		setDocsContext((prevDoc) => {
-			const newValue: CardsCTX = {
-				docs: cardsArray,
-				loading: cardsLoading,
+			const newValue: AvailableRoomsCTX = {
+				docs: availableRoomsArray,
+				loading: availableRoomsLoading,
 			};
 			return {
 				...prevDoc,
-				cards: newValue,
+				availableRooms: newValue,
 			};
 		});
-	}, [cardsSnapshot, setDocsContext, cardsLoading]);
+	}, [availableRoomsSnapshot, setDocsContext, availableRoomsLoading]);
 
 	useEffect(() => {
 		//console.log(docsContext);
