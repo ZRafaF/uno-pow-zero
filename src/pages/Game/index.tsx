@@ -58,8 +58,6 @@ const Game: FunctionComponent<GameProps> = () => {
 		setMobileOpen(!mobileOpen);
 	};
 
-	useCheckRoom(roomId, docsContext.availableRooms);
-
 	const copyRoomKey = () => {
 		navigator.clipboard.writeText(roomId);
 		toast.success("Room key successfully copied!");

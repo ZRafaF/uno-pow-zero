@@ -43,7 +43,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 			const availableRoomTyped =
 				availableRoomDoc.data() as AvailableRoomDoc;
 			deleteDoc(doc(db, "rooms", availableRoomTyped.roomId));
-			deleteDoc(doc(db, "availableRooms", availableRoomTyped.roomId));
+			deleteDoc(doc(db, "availableRooms", availableRoomDoc.id));
 		});
 	};
 
@@ -55,13 +55,20 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 					roomId: roomId,
 					uid: userIdContext,
 				};
-				addDoc(availableRoomsRef, newAvailableRoom).then((res) => {
-					updateDoc(doc(db, "rooms", roomId), {
-						roomId: roomId,
-					}).then(() => {
-						navigate("/" + roomId);
-					});
-				});
+				addDoc(availableRoomsRef, newAvailableRoom).then(
+					(availableRes) => {
+						const availableRoomId = availableRes.id;
+						updateDoc(doc(db, "availableRooms", availableRoomId), {
+							roomId: roomId,
+						});
+
+						updateDoc(doc(db, "rooms", roomId), {
+							roomId: roomId,
+						}).then(() => {
+							navigate("/" + roomId);
+						});
+					}
+				);
 			});
 		} catch (err) {
 			toast.error("Something went wrong");

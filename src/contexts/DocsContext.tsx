@@ -50,7 +50,6 @@ interface DocsProviderProps {
 const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 	children,
 	roomId,
-	uid,
 }) => {
 	const [docsContext, setDocsContext] = useState(docsContextDefault);
 
@@ -96,7 +95,7 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 	}, [availableRoomsSnapshot, setDocsContext, availableRoomsLoading]);
 
 	useEffect(() => {
-		console.log(docsContext);
+		//console.log(docsContext);
 	}, [docsContext]);
 
 	return (

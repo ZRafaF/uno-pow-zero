@@ -5,6 +5,8 @@
 
 import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
 import { AvailableRoomsCTX, RoomCTX } from "@Types/DocsCTX";
+import { availableRoomsRef } from "@config/firebase";
+import { getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,25 +23,30 @@ const checkIfRoomIsValid = (
 	return res;
 };
 
-const useCheckRoom = (
-	roomId: string,
-	availableRoomsCTX: AvailableRoomsCTX,
-	callback?: Function
-) => {
+const useCheckRoom = (roomId: string, callback?: Function) => {
 	const navigate = useNavigate();
 
 	const [valid, setValid] = useState<boolean>(true);
-	console.log(roomId);
 
 	useEffect(() => {
-		if (!availableRoomsCTX.loading) {
-			if (!checkIfRoomIsValid(availableRoomsCTX.docs, roomId)) {
-				navigate("/" + roomId + "/404");
-				if (callback) callback();
-				setValid(false);
-			}
-		}
-	}, [roomId, navigate, availableRoomsCTX, callback]);
+		const q = query(availableRoomsRef);
+		getDocs(q)
+			.then((querySnapshot) => {
+				let foundRoom: boolean = false;
+				querySnapshot.forEach((element) => {
+					const availableRoomDoc = element.data() as AvailableRoomDoc;
+					if (availableRoomDoc.roomId === roomId) foundRoom = true;
+				});
+				if (!foundRoom) {
+					navigate("/" + roomId + "/404");
+					if (callback) callback();
+					setValid(false);
+				}
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, [roomId, navigate, callback]);
 
 	return [valid];
 };
