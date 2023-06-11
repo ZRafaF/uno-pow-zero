@@ -25,7 +25,6 @@ const CardComp: FunctionComponent<CardCompProps> = ({ card, callbackFunc }) => {
 					md: "100px",
 					lg: "110px",
 				},
-				outlineColor: "primary",
 			}}
 			component="img"
 			alt={imageSrc}

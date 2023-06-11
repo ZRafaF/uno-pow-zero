@@ -70,7 +70,6 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 				roomId: roomId,
 				cards: [],
 				pfp: currentPfp,
-				playerDocId: "",
 				uid: uid,
 				username: username,
 			};

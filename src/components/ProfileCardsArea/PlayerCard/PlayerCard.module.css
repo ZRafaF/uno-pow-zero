@@ -7,6 +7,14 @@
 
 .player_card_box {
 	aspect-ratio: 6 / 9;
-	border-radius: 10px;
+	border-radius: 5px;
 	overflow: hidden;
+}
+
+.current_player {
+	outline-color: #1976d2;
+	outline-style: solid;
+	outline-width: 4px;
+	outline-offset: -2px;
+	box-shadow: 0px 0px 5px 4px rgba(0, 0, 0, 0.5);
 }

@@ -23,7 +23,13 @@ const ProfileCardsArea: FunctionComponent<ProfileCardsAreaProps> = () => {
 	const makeProfileCards: Function = (): ReactElement[] => {
 		const cardsElements = docsContext.room.doc.players.map(
 			(player, idx) => {
-				return <PlayerCard profile={player} key={`profile_${idx}`} />;
+				return (
+					<PlayerCard
+						profile={player}
+						key={`profile_${idx}`}
+						currentPlayerUid={docsContext.room.doc.currentPlayerUid}
+					/>
+				);
 			}
 		);
 		return cardsElements;

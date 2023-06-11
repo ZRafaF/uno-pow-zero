@@ -11,12 +11,26 @@ import CardFooter from "./CardFooter/CardFooter";
 
 interface PlayerCardProps {
 	profile: Player;
+	currentPlayerUid: string;
 }
 
-const PlayerCard: FunctionComponent<PlayerCardProps> = ({ profile }) => {
+const PlayerCard: FunctionComponent<PlayerCardProps> = ({
+	profile,
+	currentPlayerUid,
+}) => {
+	const makeClassName = () => {
+		if (profile.uid === currentPlayerUid) {
+			return [
+				StyleModule.player_card_box,
+				StyleModule.current_player,
+			].join(" ");
+		}
+		return StyleModule.player_card_box;
+	};
+
 	return (
 		<Box
-			className={StyleModule.player_card_box}
+			className={makeClassName()}
 			sx={{
 				width: {
 					xs: "60px",

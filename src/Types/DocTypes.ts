@@ -9,7 +9,6 @@ export interface Player {
 	roomId: string;
 	uid: string;
 	username: string;
-	playerDocId: string;
 	cards: Card[];
 }
 
