@@ -5,8 +5,8 @@
 
 import { FunctionComponent, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { availableRoomsRef, db, roomsRef } from "@config/firebase";
-import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
+import { db, roomsRef } from "@config/firebase";
+import { RoomDoc } from "@Types/DocTypes";
 import {
 	addDoc,
 	deleteDoc,
@@ -36,13 +36,11 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 	const navigate = useNavigate();
 
 	const updateOtherRooms = async (uid: string) => {
-		const q = query(availableRoomsRef, where("uid", "==", uid));
+		const q = query(roomsRef, where("uid", "==", uid));
 		const querySnapshot = await getDocs(q);
-		querySnapshot.forEach((availableRoomDoc) => {
-			const availableRoomTyped =
-				availableRoomDoc.data() as AvailableRoomDoc;
-			deleteDoc(doc(db, "rooms", availableRoomTyped.roomId));
-			deleteDoc(doc(db, "availableRooms", availableRoomDoc.id));
+		querySnapshot.forEach((roomDoc) => {
+			const roomTyped = roomDoc.data() as RoomDoc;
+			deleteDoc(doc(db, "rooms", roomTyped.roomId));
 		});
 	};
 
@@ -50,24 +48,11 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 		try {
 			addDoc(roomsRef, newRoom).then((res) => {
 				const roomId = res.id;
-				const newAvailableRoom: AvailableRoomDoc = {
+				updateDoc(doc(db, "rooms", roomId), {
 					roomId: roomId,
-					uid: userIdContext,
-				};
-				addDoc(availableRoomsRef, newAvailableRoom).then(
-					(availableRes) => {
-						const availableRoomId = availableRes.id;
-						updateDoc(doc(db, "availableRooms", availableRoomId), {
-							roomId: roomId,
-						});
-
-						updateDoc(doc(db, "rooms", roomId), {
-							roomId: roomId,
-						}).then(() => {
-							navigate("/" + roomId);
-						});
-					}
-				);
+				}).then(() => {
+					navigate("/" + roomId);
+				});
 			});
 		} catch (err) {
 			toast.error("Something went wrong");

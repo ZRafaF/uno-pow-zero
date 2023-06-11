@@ -3,10 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
-import { AvailableRoomsCTX, RoomCTX } from "@Types/DocsCTX";
-import { availableRoomsRef, db } from "@config/firebase";
-import { doc, query } from "firebase/firestore";
+import { RoomDoc } from "@Types/DocTypes";
+import { RoomCTX } from "@Types/DocsCTX";
+import { db } from "@config/firebase";
+import { doc } from "firebase/firestore";
 import {
 	createContext,
 	Dispatch,
@@ -15,11 +15,10 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { useCollectionOnce, useDocument } from "react-firebase-hooks/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 interface DocsContextProps {
 	room: RoomCTX;
-	availableRooms: AvailableRoomsCTX;
 }
 
 const docsContextDefault: DocsContextProps = {
@@ -34,7 +33,6 @@ const docsContextDefault: DocsContextProps = {
 		},
 		loading: false,
 	},
-	availableRooms: { docs: [], loading: false },
 };
 
 export const DocsContext = createContext<
@@ -55,11 +53,6 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 
 	const [roomSnapshot, roomLoading] = useDocument(doc(db, "rooms", roomId));
 
-	const availableRoomsDocQuery = query(availableRoomsRef);
-	const [availableRoomsSnapshot, availableRoomsLoading] = useCollectionOnce(
-		availableRoomsDocQuery
-	);
-
 	useEffect(() => {
 		if (roomSnapshot === undefined) return;
 
@@ -74,25 +67,6 @@ const DocsProvider: FunctionComponent<DocsProviderProps> = ({
 			};
 		});
 	}, [roomSnapshot, setDocsContext, roomLoading]);
-
-	useEffect(() => {
-		if (availableRoomsSnapshot === undefined) return;
-		const availableRoomsArray: AvailableRoomDoc[] = [];
-		availableRoomsSnapshot.forEach((doc) => {
-			availableRoomsArray.push(doc.data() as AvailableRoomDoc);
-		});
-
-		setDocsContext((prevDoc) => {
-			const newValue: AvailableRoomsCTX = {
-				docs: availableRoomsArray,
-				loading: availableRoomsLoading,
-			};
-			return {
-				...prevDoc,
-				availableRooms: newValue,
-			};
-		});
-	}, [availableRoomsSnapshot, setDocsContext, availableRoomsLoading]);
 
 	useEffect(() => {
 		//console.log(docsContext);

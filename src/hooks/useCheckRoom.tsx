@@ -3,31 +3,29 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { AvailableRoomDoc } from "@Types/DocTypes";
-import { availableRoomsRef } from "@config/firebase";
-import { getDocs, query } from "firebase/firestore";
+import { db } from "@config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const useCheckRoom = (roomId: string, callback?: Function) => {
 	const navigate = useNavigate();
 
-	const [valid, setValid] = useState<boolean>(true);
+	const [valid, setValid] = useState<boolean>(false);
 
 	useEffect(() => {
-		const q = query(availableRoomsRef);
-		getDocs(q)
-			.then((querySnapshot) => {
+		const docRef = doc(db, "rooms", roomId);
+		getDoc(docRef)
+			.then((res) => {
 				let foundRoom: boolean = false;
-				querySnapshot.forEach((element) => {
-					const availableRoomDoc = element.data() as AvailableRoomDoc;
-					if (availableRoomDoc.roomId === roomId) foundRoom = true;
-				});
+				if (res.exists()) {
+					foundRoom = true;
+				}
 				if (!foundRoom) {
 					navigate("/" + roomId + "/404");
 					if (callback) callback();
 					setValid(false);
-				}
+				} else setValid(true);
 			})
 			.catch((err) => {
 				console.error(err);
