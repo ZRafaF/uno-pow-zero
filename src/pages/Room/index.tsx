@@ -21,11 +21,11 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
-	Slide,
+	Paper,
 	Toolbar,
 	Typography,
-	useScrollTrigger,
 } from "@mui/material";
+
 import LogoutIcon from "@mui/icons-material/Logout";
 import ShareIcon from "@mui/icons-material/Share";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -55,8 +55,6 @@ const Room: FunctionComponent<RoomProps> = () => {
 
 	const [signOut] = useSignOut(auth);
 
-	const trigger = useScrollTrigger();
-
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
@@ -82,6 +80,9 @@ const Room: FunctionComponent<RoomProps> = () => {
 
 	const drawer = (
 		<div>
+			<Toolbar component={Paper} elevation={4}>
+				<Typography variant="h6">Uno Pow Zero</Typography>
+			</Toolbar>
 			<Toolbar {...bindLongPress()}>
 				<Typography variant="caption" display="block">
 					Room key: {roomId}
@@ -131,30 +132,28 @@ const Room: FunctionComponent<RoomProps> = () => {
 	return (
 		<Box sx={{ display: "flex" }}>
 			<CssBaseline />
-			<Slide appear={false} direction="down" in={!trigger}>
-				<AppBar
-					position="fixed"
-					sx={{
-						width: { sm: `calc(100% - ${drawerWidth}px)` },
-						ml: { sm: `${drawerWidth}px` },
-					}}
-				>
-					<Toolbar>
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							edge="start"
-							onClick={handleDrawerToggle}
-							sx={{ mr: 2, display: { sm: "none" } }}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography variant="h6" noWrap component="div">
-							Uno Pow Zero
-						</Typography>
-					</Toolbar>
-				</AppBar>
-			</Slide>
+			<AppBar
+				position="fixed"
+				sx={{
+					width: { sm: `calc(100% - ${drawerWidth}px)` },
+					display: { sm: "none" },
+				}}
+			>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						edge="start"
+						onClick={handleDrawerToggle}
+						sx={{ mr: 2, display: { sm: "none" } }}
+					>
+						<MenuIcon />
+					</IconButton>
+					<Typography variant="h6" noWrap component="div">
+						Uno Pow Zero
+					</Typography>
+				</Toolbar>
+			</AppBar>
 
 			<Box
 				component="nav"

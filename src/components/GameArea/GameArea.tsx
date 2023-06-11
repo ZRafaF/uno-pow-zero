@@ -53,7 +53,11 @@ const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
 				alignContent: "center",
 			}}
 		>
-			<Toolbar />
+			<Toolbar
+				sx={{
+					display: { sm: "none" },
+				}}
+			/>
 
 			<ProfileCardsArea />
 			<Box
