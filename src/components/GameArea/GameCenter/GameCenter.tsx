@@ -3,7 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import CardComp from "@components/CardComp/CardComp";
 import { makeCard } from "@helper/cardHelper";
 import { Stack } from "@mui/material";
 import { FunctionComponent } from "react";

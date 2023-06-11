@@ -5,47 +5,13 @@
 
 import { FunctionComponent, ReactElement, useContext, useRef } from "react";
 import StyleModule from "./ProfileCardsArea.module.css";
-import "react-multi-carousel/lib/styles.css";
 
 import PlayerCard from "./PlayerCard/PlayerCard";
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
-import Carousel from "react-multi-carousel";
 import { DocsContext } from "@contexts/DocsContext";
 
 interface ProfileCardsAreaProps {}
-
-const carouselResponsive = {
-	desktop: {
-		breakpoint: {
-			max: 3000,
-			min: 1024,
-		},
-		items: 5,
-		slidesToSlide: 4,
-		partialVisibilityGutter: 40,
-	},
-	mobile: {
-		breakpoint: {
-			max: 464,
-			min: 0,
-		},
-		items: 3,
-		slidesToSlide: 2,
-
-		partialVisibilityGutter: 30,
-	},
-	tablet: {
-		breakpoint: {
-			max: 1024,
-			min: 464,
-		},
-		items: 4,
-		slidesToSlide: 3,
-
-		partialVisibilityGutter: 30,
-	},
-};
 
 const ProfileCardsArea: FunctionComponent<ProfileCardsAreaProps> = () => {
 	const ref =
