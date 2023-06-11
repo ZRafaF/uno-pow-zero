@@ -5,36 +5,9 @@
 
 import CardsStack from "@components/CardsStack/CardsStack";
 import ProfileCardsArea from "@components/ProfileCardsArea/ProfileCardsArea";
-import { makeCard } from "@helper/cardHelper";
 import { Box, Container, Toolbar } from "@mui/material";
 import { FunctionComponent } from "react";
 import GameCenter from "./GameCenter/GameCenter";
-
-const cardsArray = [
-	makeCard("black", "wild"),
-	makeCard("blue", "2"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("blue", "3"),
-	makeCard("red", "3"),
-	makeCard("yellow", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "2"),
-	makeCard("green", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "5"),
-	makeCard("blue", "3"),
-	makeCard("red", "0"),
-	makeCard("red", "2"),
-	makeCard("red", "3"),
-	makeCard("green", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("red", "3"),
-	makeCard("yellow", "3"),
-	makeCard("yellow", "2plus"),
-];
 
 interface GameAreaProps {
 	roomId: string;
@@ -78,7 +51,7 @@ const GameArea: FunctionComponent<GameAreaProps> = ({ roomId }) => {
 					alignContent: "center",
 				}}
 			>
-				<CardsStack cards={cardsArray} />
+				<CardsStack />
 			</Box>
 		</Container>
 	);

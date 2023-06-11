@@ -56,7 +56,6 @@ const Game: FunctionComponent<GameProps> = () => {
 	const copyRoomKey = () => {
 		navigator.clipboard.writeText(roomId);
 		toast.success("Room key successfully copied!");
-		navigator.vibrate(200);
 	};
 
 	const drawer = (

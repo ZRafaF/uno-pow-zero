@@ -71,6 +71,7 @@ const CreateRoom: FunctionComponent<CreateRoomProps> = () => {
 				currentPlayerUid: "",
 				currentDirection: "cw",
 				players: [],
+				lastCards: [],
 				roomId: "",
 			};
 

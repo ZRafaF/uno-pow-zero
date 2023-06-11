@@ -28,6 +28,7 @@ const docsContextDefault: DocsContextProps = {
 			currentDirection: "cw",
 			currentPlayerUid: "",
 			players: [],
+			lastCards: [],
 			roomId: "",
 			uid: "",
 		},

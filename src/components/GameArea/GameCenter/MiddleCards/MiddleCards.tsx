@@ -3,18 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import Card from "@Types/Card";
-import { getCardImage } from "@helper/cardHelper";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import { Box } from "@mui/material";
 
 interface MiddleCardsProps {
-	card: Card;
+	cardSrc: string;
 }
 
-const MiddleCards: FunctionComponent<MiddleCardsProps> = ({ card }) => {
-	const [imageSrc] = useState<string>(getCardImage(card));
-
+const MiddleCards: FunctionComponent<MiddleCardsProps> = ({ cardSrc }) => {
 	return (
 		<Box
 			sx={{
@@ -25,8 +21,8 @@ const MiddleCards: FunctionComponent<MiddleCardsProps> = ({ card }) => {
 				},
 			}}
 			component="img"
-			alt={imageSrc}
-			src={imageSrc}
+			alt={cardSrc}
+			src={cardSrc}
 		/>
 	);
 };

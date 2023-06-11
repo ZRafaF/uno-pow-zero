@@ -5,22 +5,40 @@
 
 import Card from "@Types/Card";
 import CardComp from "@components/CardComp/CardComp";
+import { DocsContext } from "@contexts/DocsContext";
+
 import StyleModule from "./CardsStack.module.css";
-import { FunctionComponent, ReactElement, useRef } from "react";
+import {
+	FunctionComponent,
+	ReactElement,
+	useRef,
+	useContext,
+	useState,
+	useEffect,
+} from "react";
 import { Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
+import UserIdContext from "@contexts/UserIdContext";
 
-interface PlayerCardsProps {
-	cards: Card[];
-}
+interface PlayerCardsProps {}
 
-const CardsStack: FunctionComponent<PlayerCardsProps> = ({ cards }) => {
+const CardsStack: FunctionComponent<PlayerCardsProps> = () => {
+	const [docsContext] = useContext(DocsContext);
+	const [userIdContext] = useContext(UserIdContext);
+	const [myCards, setMyCards] = useState<Card[]>([]);
+
+	useEffect(() => {
+		docsContext.room.doc.players.forEach((element) => {
+			if (userIdContext === element.uid) setMyCards(element.cards);
+		});
+	}, [docsContext, userIdContext]);
+
 	const ref =
 		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 	const { events } = useDraggable(ref);
 
 	const makeCards: Function = (): ReactElement[] => {
-		const cardsElements = cards.map((card, idx) => {
+		const cardsElements = myCards.map((card, idx) => {
 			return <CardComp card={card} key={`card_${idx}`} />;
 		});
 		return cardsElements;

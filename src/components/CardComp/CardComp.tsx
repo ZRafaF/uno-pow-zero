@@ -11,9 +11,10 @@ import { Box } from "@mui/material";
 
 interface CardCompProps {
 	card: Card;
+	callbackFunc?: CallableFunction;
 }
 
-const CardComp: FunctionComponent<CardCompProps> = ({ card }) => {
+const CardComp: FunctionComponent<CardCompProps> = ({ card, callbackFunc }) => {
 	const [imageSrc] = useState<string>(getCardImage(card));
 
 	return (
@@ -30,6 +31,11 @@ const CardComp: FunctionComponent<CardCompProps> = ({ card }) => {
 			alt={imageSrc}
 			src={imageSrc}
 			className={StyleModule.card_img}
+			onClick={() => {
+				if (callbackFunc) {
+					callbackFunc();
+				}
+			}}
 		/>
 	);
 };

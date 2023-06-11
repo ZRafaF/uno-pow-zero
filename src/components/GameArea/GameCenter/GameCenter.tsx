@@ -3,16 +3,28 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { makeCard } from "@helper/cardHelper";
+import { getCardImage, makeCard } from "@helper/cardHelper";
 import { Stack } from "@mui/material";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import MiddleCards from "./MiddleCards/MiddleCards";
+import { DocsContext } from "@contexts/DocsContext";
+import CardPile from "./CardPile/CardPile";
 
 interface GameCenterProps {}
 
-const centerCard = makeCard("blue", "2");
+const defaultCard = makeCard("black", "wild");
 
 const GameCenter: FunctionComponent<GameCenterProps> = () => {
+	const [docsContext] = useContext(DocsContext);
+	//const [centerCard, setCenterCard] = useState(defaultCard);
+	const [centerCardImage, setCenterCardImage] = useState<string>(
+		getCardImage(defaultCard)
+	);
+	useEffect(() => {
+		//setCenterCard(docsContext.room.doc.currentCard);
+		setCenterCardImage(getCardImage(docsContext.room.doc.currentCard));
+	}, [docsContext]);
+
 	return (
 		<Stack
 			direction="row"
@@ -20,7 +32,8 @@ const GameCenter: FunctionComponent<GameCenterProps> = () => {
 			alignItems="center"
 			spacing={2}
 		>
-			<MiddleCards card={centerCard} />
+			<CardPile />
+			<MiddleCards cardSrc={centerCardImage} />
 		</Stack>
 	);
 };

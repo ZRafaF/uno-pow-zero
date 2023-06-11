@@ -19,5 +19,6 @@ export interface RoomDoc {
 	currentDirection: "cw" | "ccw";
 	currentPlayerUid: string;
 	players: Player[];
+	lastCards: Card[];
 	roomId: string;
 }
