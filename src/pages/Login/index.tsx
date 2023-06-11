@@ -18,7 +18,7 @@ const Login: FunctionComponent<LoginProps> = () => {
 	const [docsContext] = useContext(DocsContext);
 
 	//useCheckRoom(roomId, docsContext.room);
-	useCheckPlayer(roomId, docsContext.player, docsContext.room);
+	useCheckPlayer(roomId, docsContext.room);
 
 	return (
 		<React.Fragment>

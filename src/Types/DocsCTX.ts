@@ -2,17 +2,14 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import { PlayerDoc, RoomDoc, CardsDoc } from "@Types/DocTypes";
+import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
 
-export interface PlayerCTX {
-	docs: PlayerDoc[];
-	loading: boolean;
-}
 export interface RoomCTX {
-	docs: RoomDoc[];
+	doc: RoomDoc;
 	loading: boolean;
 }
-export interface CardsCTX {
-	docs: CardsDoc[];
+
+export interface AvailableRoomsCTX {
+	docs: AvailableRoomDoc[];
 	loading: boolean;
 }

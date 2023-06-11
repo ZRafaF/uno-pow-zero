@@ -3,15 +3,18 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { RoomDoc } from "@Types/DocTypes";
-import { RoomCTX } from "@Types/DocsCTX";
+import { AvailableRoomDoc, RoomDoc } from "@Types/DocTypes";
+import { AvailableRoomsCTX, RoomCTX } from "@Types/DocsCTX";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const checkIfRoomIsValid = (roomDocs: RoomDoc[], roomId: string): boolean => {
+const checkIfRoomIsValid = (
+	availableRooms: AvailableRoomDoc[],
+	roomId: string
+): boolean => {
 	let res = false;
 
-	roomDocs.forEach((element) => {
+	availableRooms.forEach((element) => {
 		if (element.roomId === roomId) res = true;
 	});
 
@@ -20,7 +23,7 @@ const checkIfRoomIsValid = (roomDocs: RoomDoc[], roomId: string): boolean => {
 
 const useCheckRoom = (
 	roomId: string,
-	roomCtx: RoomCTX,
+	availableRoomsCTX: AvailableRoomsCTX,
 	callback?: Function
 ) => {
 	const navigate = useNavigate();
@@ -29,14 +32,14 @@ const useCheckRoom = (
 	console.log(roomId);
 
 	useEffect(() => {
-		if (!roomCtx.loading) {
-			if (!checkIfRoomIsValid(roomCtx.docs, roomId)) {
+		if (!availableRoomsCTX.loading) {
+			if (!checkIfRoomIsValid(availableRoomsCTX.docs, roomId)) {
 				navigate("/" + roomId + "/404");
 				if (callback) callback();
 				setValid(false);
 			}
 		}
-	}, [roomId, navigate, roomCtx, callback]);
+	}, [roomId, navigate, availableRoomsCTX, callback]);
 
 	return [valid];
 };

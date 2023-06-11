@@ -6,10 +6,10 @@
 import { FunctionComponent } from "react";
 import StyleModule from "./PlayerCard.module.css";
 import { Avatar, Box } from "@mui/material";
-import { PlayerDoc } from "@Types/DocTypes";
+import { Player } from "@Types/DocTypes";
 
 interface PlayerCardProps {
-	profile: PlayerDoc;
+	profile: Player;
 }
 
 const PlayerCard: FunctionComponent<PlayerCardProps> = ({ profile }) => {

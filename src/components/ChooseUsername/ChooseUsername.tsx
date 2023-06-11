@@ -17,11 +17,11 @@ import {
 } from "@mui/material";
 import PfpPicker from "./PfpPicker/PfpPicker";
 import { toast } from "react-toastify";
-import { auth, db, playersRef } from "@config/firebase";
+import { auth, db } from "@config/firebase";
 import { signInAnonymously } from "firebase/auth";
 import { LoadingButton } from "@mui/lab";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { PlayerDoc } from "@Types/DocTypes";
+import { Player } from "@Types/DocTypes";
 import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { DocsContext } from "@contexts/DocsContext";
 
@@ -34,22 +34,7 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 	const [currentPfp, setCurrentPfp] = useState<string | undefined>();
 	const [sending, setSending] = useState<boolean>(false);
 
-	const updateOthersPlayerInstances = async (newPlayer: PlayerDoc) => {
-		await docsContext.player.docs.forEach(async (playerDoc) => {
-			await deleteDoc(doc(db, "players", playerDoc.playerDocId));
-		});
-	};
-
-	const createPlayer = async (newPlayer: PlayerDoc) => {
-		await updateOthersPlayerInstances(newPlayer).then(() => {
-			addDoc(playersRef, newPlayer).then((res) => {
-				const playerDocId = res.id;
-				updateDoc(doc(db, "players", playerDocId), {
-					playerDocId: playerDocId,
-				});
-			});
-		});
-	};
+	const createPlayer = async (newPlayer: Player) => {};
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -68,15 +53,6 @@ const ChooseUsername: FunctionComponent<ChooseUsernameProps> = ({ roomId }) => {
 		try {
 			signInAnonymously(auth).then((res) => {
 				const uid = res.user.uid;
-				const newPlayer: PlayerDoc = {
-					roomId: roomId,
-					cardsDocId: "",
-					pfp: currentPfp,
-					playerDocId: "",
-					uid: uid,
-					username: username,
-				};
-				createPlayer(newPlayer);
 			});
 		} catch (err) {
 			toast.error("Something went wrong");

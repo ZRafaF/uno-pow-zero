@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, HashRouter } from "react-router-dom";
 
 import Home from "@pages/Home";
-import Room from "@pages/Room";
+import Game from "@pages/Game";
 import { ToastContainer } from "react-toastify";
 
 import { signInAnonymously } from "firebase/auth";
@@ -19,6 +19,7 @@ import DocsProvider from "@contexts/DocsContext";
 import RoomNotFound from "@pages/RoomNotFound";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Background from "@components/Background/Background";
+import Room from "@pages/Room";
 signInAnonymously(auth).catch(alert);
 
 const darkTheme = createTheme({
@@ -58,21 +59,18 @@ function App() {
 			<Background />
 
 			<UserIdContext.Provider value={[userIdContext, setUserIdContext]}>
-				<DocsProvider uid={userIdContext}>
-					<ToastContainer />
-					<HashRouter>
-						<Routes>
-							<Route path="/" element={<Home />} />
-							<Route path="/:roomId/room" element={<Room />} />
-							<Route path="/:roomId/login" element={<Login />} />
-							<Route
-								path="/:roomId/404"
-								element={<RoomNotFound />}
-							/>
-							<Route path="*" element={<PageNotFound />} />
-						</Routes>
-					</HashRouter>
-				</DocsProvider>
+				<ToastContainer />
+				<HashRouter>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/:roomId" element={<Room />}>
+							<Route path="game" element={<Game />} />
+							<Route path="login" element={<Login />} />
+							<Route path="404" element={<RoomNotFound />} />
+						</Route>
+						<Route path="*" element={<PageNotFound />} />
+					</Routes>
+				</HashRouter>
 			</UserIdContext.Provider>
 		</ThemeProvider>
 	);

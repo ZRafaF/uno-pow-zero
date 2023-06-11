@@ -4,20 +4,13 @@
 // https://opensource.org/licenses/MIT
 import Card from "./Card";
 
-export interface CardsDoc {
-	cards: Card[];
-	cardsDocId: string;
-	uid: string;
-	playerDocId: string;
-}
-
-export interface PlayerDoc {
-	cardsDocId: string;
+export interface Player {
 	pfp: string;
 	roomId: string;
 	uid: string;
 	username: string;
 	playerDocId: string;
+	cards: Card[];
 }
 
 export interface RoomDoc {
@@ -25,6 +18,11 @@ export interface RoomDoc {
 	currentCard: Card;
 	currentDirection: "cw" | "ccw";
 	currentPlayerUid: string;
-	playersUid: string[];
+	players: Player[];
+	roomId: string;
+}
+
+export interface AvailableRoomDoc {
+	uid: string;
 	roomId: string;
 }
