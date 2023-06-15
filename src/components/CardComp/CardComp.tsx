@@ -6,16 +6,25 @@
 import Card from "@Types/Card";
 import StyleModule from "./CardComp.module.css";
 import { getCardImage } from "@helper/cardHelper";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 
 interface CardCompProps {
 	card: Card;
+	index?: number;
 	callbackFunc?: CallableFunction;
 }
 
-const CardComp: FunctionComponent<CardCompProps> = ({ card, callbackFunc }) => {
-	const [imageSrc] = useState<string>(getCardImage(card));
+const CardComp: FunctionComponent<CardCompProps> = ({
+	card,
+	callbackFunc,
+	index = -1,
+}) => {
+	const [imageSrc, setImageSrc] = useState<string>(getCardImage(card));
+
+	useEffect(() => {
+		setImageSrc(getCardImage(card));
+	}, [card]);
 
 	return (
 		<Box
@@ -32,7 +41,7 @@ const CardComp: FunctionComponent<CardCompProps> = ({ card, callbackFunc }) => {
 			className={StyleModule.card_img}
 			onClick={() => {
 				if (callbackFunc) {
-					callbackFunc();
+					callbackFunc(index);
 				}
 			}}
 		/>

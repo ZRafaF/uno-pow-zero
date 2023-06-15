@@ -3,6 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import Debug from "@components/Debug/Debug";
 import RoomLanding from "@components/RoomLanding/RoomLanding";
 import { DocsProvider } from "@contexts/DocsContext";
 import UserIdContext from "@contexts/UserIdContext";
@@ -22,6 +23,7 @@ const Room: FunctionComponent<RoomProps> = () => {
 			<RoomLanding roomId={roomId} uid={userIdContext}>
 				<Outlet />
 			</RoomLanding>
+			<Debug />
 		</DocsProvider>
 	);
 };

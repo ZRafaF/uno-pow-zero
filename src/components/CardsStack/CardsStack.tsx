@@ -19,6 +19,7 @@ import {
 import { Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
 import UserIdContext from "@contexts/UserIdContext";
+import { endTurn, playCard } from "@helper/firebaseHelper";
 
 interface PlayerCardsProps {}
 
@@ -37,9 +38,22 @@ const CardsStack: FunctionComponent<PlayerCardsProps> = () => {
 		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 	const { events } = useDraggable(ref);
 
+	const useCard = (index: number) => {
+		playCard(docsContext.room.doc, userIdContext, index)?.then(() => {
+			endTurn(docsContext.room.doc);
+		});
+	};
+
 	const makeCards: Function = (): ReactElement[] => {
 		const cardsElements = myCards.map((card, idx) => {
-			return <CardComp card={card} key={`card_${idx}`} />;
+			return (
+				<CardComp
+					card={card}
+					key={`card_${idx}`}
+					index={idx}
+					callbackFunc={useCard}
+				/>
+			);
 		});
 		return cardsElements;
 	};

@@ -11,12 +11,17 @@ interface CardFooterProps {
 	numberOfCards: number;
 }
 
+const maxNumberOfCardsRendered = 20;
+
 const CardFooter: FunctionComponent<CardFooterProps> = ({ numberOfCards }) => {
 	const makeCards: Function = (): ReactElement[] => {
 		const cardsElements: ReactElement[] = [];
 
 		for (let i = 0; i < numberOfCards; i++) {
-			cardsElements.push(i ? <PartialCardBack /> : <FullCardBack />);
+			if (i > maxNumberOfCardsRendered) break;
+			cardsElements.push(
+				i ? <PartialCardBack key={i} /> : <FullCardBack key={i} />
+			);
 		}
 
 		return cardsElements;

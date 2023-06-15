@@ -35,7 +35,6 @@ function App() {
 	return (
 		<ThemeSelectorProvider>
 			<Background />
-
 			<UserIdContext.Provider value={[userIdContext, setUserIdContext]}>
 				<ToastContainer />
 				<HashRouter>
