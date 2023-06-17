@@ -6,7 +6,7 @@
 import { FunctionComponent } from "react";
 import { useParams } from "react-router-dom";
 
-import GameArea from "@components/GameArea/GameArea";
+import GameArea from "./GameArea/GameArea";
 
 interface GameProps {}
 

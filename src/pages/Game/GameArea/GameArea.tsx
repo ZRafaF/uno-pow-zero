@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import CardsStack from "@components/CardsStack/CardsStack";
-import ProfileCardsArea from "@components/ProfileCardsArea/ProfileCardsArea";
+import CardsStack from "./CardsStack/CardsStack";
+import ProfileCardsArea from "./ProfileCardsArea/ProfileCardsArea";
 import { Box } from "@mui/material";
 import React, { FunctionComponent } from "react";
 import GameCenter from "./GameCenter/GameCenter";

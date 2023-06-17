@@ -46,7 +46,7 @@ import { auth } from "@config/firebase";
 import Brightness6Icon from "@mui/icons-material/Brightness6";
 import DownloadIcon from "@mui/icons-material/Download";
 import { ThemeSelectorContext } from "@contexts/ThemeSelectorContext";
-import QrCodeListItem from "@pages/Waiting/OwnerArea/QrCodeListItem/QrCodeListItem";
+import QrCodeListItem from "./QrCodeListItem/QrCodeListItem";
 import { usePWAInstall } from "react-use-pwa-install";
 
 const drawerWidth = 240;

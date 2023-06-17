@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import ChooseUsername from "@components/ChooseUsername/ChooseUsername";
+import ChooseUsername from "./ChooseUsername/ChooseUsername";
 import React, { FunctionComponent } from "react";
 import { useParams } from "react-router-dom";
 

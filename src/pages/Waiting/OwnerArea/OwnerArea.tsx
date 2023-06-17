@@ -37,7 +37,7 @@ import Card from "@Types/Card";
 import { doc, updateDoc } from "firebase/firestore";
 
 const startingNumberOfCards: number = 7;
-
+const maxNumOfCards: number = 100;
 interface OwnerAreaProps {}
 
 const OwnerArea: FunctionComponent<OwnerAreaProps> = () => {
@@ -153,9 +153,9 @@ const OwnerArea: FunctionComponent<OwnerAreaProps> = () => {
 			setHelperText("Number must be an integer");
 			return;
 		}
-		if (numberValue > 999) {
+		if (numberValue > maxNumOfCards) {
 			setValidCardNumber(false);
-			setHelperText("Number must be less than 999");
+			setHelperText("Number must be less than " + maxNumOfCards);
 			return;
 		}
 		setValidCardNumber(true);

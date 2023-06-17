@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import React, { FunctionComponent, useContext } from "react";
-import CreateRoomModal from "@components/CreateRoomModal/CreateRoomModal";
+import CreateRoomModal from "./CreateRoomModal/CreateRoomModal";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
 	Divider,
