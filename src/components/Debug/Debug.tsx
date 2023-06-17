@@ -6,7 +6,7 @@
 import { DocsContext } from "@contexts/DocsContext";
 import UserIdContext from "@contexts/UserIdContext";
 import { makeCard } from "@helper/cardHelper";
-import { addNewCard, endTurn } from "@helper/firebaseHelper";
+import { addNewCard, endTurn } from "@helper/gameHelper";
 import { Box } from "@mui/material";
 import { FunctionComponent, useContext } from "react";
 

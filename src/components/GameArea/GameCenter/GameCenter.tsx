@@ -12,7 +12,7 @@ import CardPile from "./CardPile/CardPile";
 
 interface GameCenterProps {}
 
-const defaultCard = makeCard("black", "wild");
+const defaultCard = makeCard("red", "0");
 
 const GameCenter: FunctionComponent<GameCenterProps> = () => {
 	const [docsContext] = useContext(DocsContext);

@@ -43,9 +43,11 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { toast } from "react-toastify";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { auth } from "@config/firebase";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness6Icon from "@mui/icons-material/Brightness6";
+import DownloadIcon from "@mui/icons-material/Download";
 import { ThemeSelectorContext } from "@contexts/ThemeSelectorContext";
 import QrCodeListItem from "@pages/Waiting/OwnerArea/QrCodeListItem/QrCodeListItem";
+import { usePWAInstall } from "react-use-pwa-install";
 
 const drawerWidth = 240;
 
@@ -76,11 +78,11 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 			});
 
 			if (!foundPlayer) {
-				navigate("/" + roomId + "/login");
+				navigate("/" + roomId + "/login", { replace: true });
 			} else if (docsContext.room.doc.started) {
-				navigate("/" + roomId + "/game");
+				navigate("/" + roomId + "/game", { replace: true });
 			} else {
-				navigate("/" + roomId + "/waiting");
+				navigate("/" + roomId + "/waiting", { replace: true });
 			}
 		}
 	}, [roomId, navigate, docsContext, uid, isRoomIdValid]);
@@ -88,6 +90,8 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 	const [mobileOpen, setMobileOpen] = useState(false);
 
 	const [signOut] = useSignOut(auth);
+
+	const installPwa = usePWAInstall();
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -177,9 +181,17 @@ const RoomLanding: FunctionComponent<RoomLandingProps> = ({
 						}}
 					>
 						<ListItemIcon>
-							<Brightness4Icon />
+							<Brightness6Icon />
 						</ListItemIcon>
 						<ListItemText primary="Toggle Theme" />
+					</ListItemButton>
+				</ListItem>
+				<ListItem disablePadding>
+					<ListItemButton onClick={installPwa}>
+						<ListItemIcon>
+							<DownloadIcon />
+						</ListItemIcon>
+						<ListItemText primary="Install APP" />
 					</ListItemButton>
 				</ListItem>
 			</List>

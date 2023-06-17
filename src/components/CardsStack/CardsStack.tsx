@@ -19,7 +19,7 @@ import {
 import { Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
 import UserIdContext from "@contexts/UserIdContext";
-import { endTurn, playCard } from "@helper/firebaseHelper";
+import { endTurn, playCard } from "@helper/gameHelper";
 
 interface PlayerCardsProps {}
 
@@ -52,6 +52,7 @@ const CardsStack: FunctionComponent<PlayerCardsProps> = () => {
 					key={`card_${idx}`}
 					index={idx}
 					callbackFunc={useCard}
+					allCards={myCards}
 				/>
 			);
 		});

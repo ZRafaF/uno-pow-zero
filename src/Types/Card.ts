@@ -8,8 +8,8 @@ export type CardColor =
 	| "green"
 	| "red"
 	| "yellow"
-	| "black"
-	| "card_back";
+	| "card_back"
+	| "black";
 
 export type CardType =
 	| "0"

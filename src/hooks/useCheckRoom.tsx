@@ -22,7 +22,7 @@ const useCheckRoom = (roomId: string, callback?: Function) => {
 					foundRoom = true;
 				}
 				if (!foundRoom) {
-					navigate("/" + roomId + "/404");
+					navigate("/" + roomId + "/404", { replace: true });
 					if (callback) callback();
 					setValid(false);
 				} else setValid(true);

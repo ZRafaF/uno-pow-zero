@@ -7,7 +7,7 @@ import CardComp from "@components/CardComp/CardComp";
 import { DocsContext } from "@contexts/DocsContext";
 import UserIdContext from "@contexts/UserIdContext";
 import { makeCard, makeRandomCard } from "@helper/cardHelper";
-import { endTurn, addNewCard } from "@helper/firebaseHelper";
+import { endTurn, addNewCard } from "@helper/gameHelper";
 import { FunctionComponent, useContext } from "react";
 
 interface CardPileProps {}
