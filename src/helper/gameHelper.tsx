@@ -69,10 +69,18 @@ export const playCard = async (
 		}
 	});
 
+	const newDirection =
+		myCard.type === "inverse"
+			? roomDoc.currentDirection === "cw"
+				? "ccw"
+				: "cw"
+			: roomDoc.currentDirection;
+
 	await updateDoc(doc(db, "rooms", roomDoc.roomId), {
 		players: newPlayersArray,
 		currentCard: myCard,
 		lastCards: newLastCardsArray,
+		currentDirection: newDirection,
 	});
 	return true;
 };

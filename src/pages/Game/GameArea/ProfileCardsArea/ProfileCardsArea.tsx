@@ -11,6 +11,8 @@ import { Box, Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
 import { DocsContext } from "@contexts/DocsContext";
 import { getCardImage } from "@helper/cardHelper";
+import WestIcon from "@mui/icons-material/West";
+import EastIcon from "@mui/icons-material/East";
 
 interface ProfileCardsAreaProps {}
 
@@ -64,6 +66,22 @@ const ProfileCardsArea: FunctionComponent<ProfileCardsAreaProps> = () => {
 			>
 				{makeProfileCards()}
 			</Stack>
+			<Box
+				sx={{
+					bottom: 0,
+					display: "flex",
+					justifyContent: "center",
+					alignContent: "center",
+					alignItems: "center",
+				}}
+				color={"white"}
+			>
+				{docsContext.room.doc.currentDirection === "cw" ? (
+					<EastIcon />
+				) : (
+					<WestIcon />
+				)}
+			</Box>
 			<Stack
 				direction="row"
 				spacing={1}
