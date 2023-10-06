@@ -3,11 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 import StyleModule from "./PlayerCard.module.css";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { Player } from "@Types/DocTypes";
 import CardFooter from "./CardFooter/CardFooter";
+import UserIdContext from "@contexts/UserIdContext";
+import PersonIcon from "@mui/icons-material/Person";
 
 interface PlayerCardProps {
 	profile: Player;
@@ -18,6 +20,8 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = ({
 	profile,
 	currentPlayerUid,
 }) => {
+	const [userIdContext] = useContext(UserIdContext);
+
 	const makeClassName = () => {
 		if (profile.uid === currentPlayerUid) {
 			return [
@@ -48,7 +52,21 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = ({
 				boxShadow: 3,
 			}}
 		>
-			<Box sx={{ backgroundColor: "grey.800" }}>
+			<Box
+				sx={{
+					backgroundColor: "grey.800",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				{userIdContext === profile.uid && (
+					<PersonIcon
+						sx={{
+							mr: 1,
+						}}
+					/>
+				)}
 				<Typography noWrap color={"white"} textAlign={"center"}>
 					{profile.username}
 				</Typography>

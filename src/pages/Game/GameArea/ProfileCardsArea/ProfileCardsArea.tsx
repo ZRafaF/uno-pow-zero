@@ -7,9 +7,10 @@ import { FunctionComponent, ReactElement, useContext, useRef } from "react";
 import StyleModule from "./ProfileCardsArea.module.css";
 
 import PlayerCard from "./PlayerCard/PlayerCard";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
 import { DocsContext } from "@contexts/DocsContext";
+import { getCardImage } from "@helper/cardHelper";
 
 interface ProfileCardsAreaProps {}
 
@@ -36,32 +37,72 @@ const ProfileCardsArea: FunctionComponent<ProfileCardsAreaProps> = () => {
 	};
 
 	return (
-		<Stack
-			direction="row"
-			spacing={1}
-			sx={{
-				overflowX: "scroll",
-				minHeight: {
-					xs: "100px",
-					md: "110px",
-					lg: "120px",
-				},
-				mx: {
-					xs: "0",
-					md: "100px",
-					lg: "240px",
-				},
-				p: {
-					xs: 1,
-					md: 2,
-				},
-			}}
-			{...events}
-			ref={ref}
-			className={StyleModule.profile_cards_area_stack}
-		>
-			{makeProfileCards()}
-		</Stack>
+		<Box>
+			<Stack
+				direction="row"
+				spacing={1}
+				sx={{
+					overflowX: "scroll",
+					minHeight: {
+						xs: "100px",
+						md: "110px",
+						lg: "120px",
+					},
+					mx: {
+						xs: "0",
+						md: "100px",
+						lg: "240px",
+					},
+					p: {
+						xs: 1,
+						md: 2,
+					},
+				}}
+				{...events}
+				ref={ref}
+				className={StyleModule.profile_cards_area_stack}
+			>
+				{makeProfileCards()}
+			</Stack>
+			<Stack
+				direction="row"
+				spacing={1}
+				sx={{
+					overflowX: "scroll",
+					mx: {
+						xs: "0",
+						md: "100px",
+						lg: "240px",
+					},
+					p: {
+						xs: 1,
+						md: 1,
+					},
+				}}
+				{...events}
+				ref={ref}
+				className={StyleModule.last_cards_area_stack}
+			>
+				{docsContext.room.doc.lastCards.map((card, idx) => {
+					if (idx < 20)
+						return (
+							<Box
+								sx={{
+									width: {
+										xs: "30px",
+										md: "30px",
+										lg: "30px",
+									},
+								}}
+								component="img"
+								alt={getCardImage(card)}
+								src={getCardImage(card)}
+							/>
+						);
+					return null;
+				})}
+			</Stack>
+		</Box>
 	);
 };
 

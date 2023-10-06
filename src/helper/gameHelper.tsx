@@ -48,28 +48,33 @@ export const isPlayValid = (myCard: Card, currentCard: Card) => {
 	return false;
 };
 
-export const playCard = (roomDoc: RoomDoc, uid: string, cardIdx: number) => {
+export const playCard = async (
+	roomDoc: RoomDoc,
+	uid: string,
+	cardIdx: number,
+	myCard: Card
+) => {
 	if (roomDoc.currentPlayerUid !== uid) return;
 
-	const myIndex = getIndexFromUid(roomDoc.players, uid);
-
-	const myCard: Card = roomDoc.players[myIndex].cards[cardIdx];
-
 	if (!isPlayValid(myCard, roomDoc.currentCard)) {
-		return;
+		return false;
 	}
 
 	let newPlayersArray = [...roomDoc.players];
+	let newLastCardsArray = [...roomDoc.lastCards];
+	newLastCardsArray.unshift(roomDoc.currentCard);
 	newPlayersArray.forEach((element) => {
 		if (uid === element.uid) {
 			element.cards.splice(cardIdx, 1);
 		}
 	});
 
-	return updateDoc(doc(db, "rooms", roomDoc.roomId), {
+	await updateDoc(doc(db, "rooms", roomDoc.roomId), {
 		players: newPlayersArray,
 		currentCard: myCard,
+		lastCards: newLastCardsArray,
 	});
+	return true;
 };
 
 export const addNewCard = (roomDoc: RoomDoc, uid: string, newCard: Card) => {

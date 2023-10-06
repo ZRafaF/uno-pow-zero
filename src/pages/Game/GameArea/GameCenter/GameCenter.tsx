@@ -33,6 +33,7 @@ const GameCenter: FunctionComponent<GameCenterProps> = () => {
 			spacing={2}
 		>
 			<CardPile />
+
 			<MiddleCards cardSrc={centerCardImage} />
 		</Stack>
 	);

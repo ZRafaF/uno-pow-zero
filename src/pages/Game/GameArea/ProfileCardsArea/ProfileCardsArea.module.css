@@ -16,6 +16,12 @@
 	border-radius: 10px;
 }
 
+.last_cards_area_stack {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	border-radius: 10px;
+}
+
 .profile_cards_area_carousel {
 	overflow: hidden;
 }

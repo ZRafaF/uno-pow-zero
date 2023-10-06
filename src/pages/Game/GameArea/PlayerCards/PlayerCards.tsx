@@ -7,7 +7,7 @@ import Card from "@Types/Card";
 import CardComp from "@components/CardComp/CardComp";
 import { DocsContext } from "@contexts/DocsContext";
 
-import StyleModule from "./CardsStack.module.css";
+import StyleModule from "./PlayerCards.module.css";
 import {
 	FunctionComponent,
 	ReactElement,
@@ -19,14 +19,17 @@ import {
 import { Stack } from "@mui/material";
 import { useDraggable } from "react-use-draggable-scroll";
 import UserIdContext from "@contexts/UserIdContext";
-import { endTurn, playCard } from "@helper/gameHelper";
+import { getIndexFromUid, playCard } from "@helper/gameHelper";
+import useSelectColor from "@hooks/useSelectColor";
 
 interface PlayerCardsProps {}
 
-const CardsStack: FunctionComponent<PlayerCardsProps> = () => {
+const PlayerCards: FunctionComponent<PlayerCardsProps> = () => {
 	const [docsContext] = useContext(DocsContext);
 	const [userIdContext] = useContext(UserIdContext);
 	const [myCards, setMyCards] = useState<Card[]>([]);
+
+	const [SelectCardDialog, openDialog] = useSelectColor();
 
 	useEffect(() => {
 		docsContext.room.doc.players.forEach((element) => {
@@ -38,10 +41,23 @@ const CardsStack: FunctionComponent<PlayerCardsProps> = () => {
 		useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 	const { events } = useDraggable(ref);
 
-	const useCard = (index: number) => {
-		playCard(docsContext.room.doc, userIdContext, index)?.then(() => {
-			endTurn(docsContext.room.doc);
-		});
+	const useCard = async (index: number) => {
+		if (docsContext.room.doc.currentPlayerUid !== userIdContext) return;
+		const roomDoc = docsContext.room.doc;
+		const myPlayerIndex = getIndexFromUid(roomDoc.players, userIdContext);
+		const myCard: Card = roomDoc.players[myPlayerIndex].cards[index];
+
+		if (myCard.type === "4plus" || myCard.type === "wild") {
+			const selectedColor = await openDialog();
+			if (selectedColor === undefined) return;
+			myCard.color = selectedColor;
+		}
+
+		playCard(docsContext.room.doc, userIdContext, index, myCard).then(
+			(result) => {
+				//if (result) endTurn(docsContext.room.doc);
+			}
+		);
 	};
 
 	const makeCards: Function = (): ReactElement[] => {
@@ -60,19 +76,23 @@ const CardsStack: FunctionComponent<PlayerCardsProps> = () => {
 	};
 
 	return (
-		<Stack
-			direction="row"
-			spacing={1}
-			sx={{ overflowX: "scroll" }}
-			{...events}
-			ref={ref}
-			px={2}
-			py={2}
-			className={StyleModule.player_cards_stack}
-		>
-			{makeCards()}
-		</Stack>
+		<>
+			<Stack
+				direction="row"
+				spacing={1}
+				sx={{ overflowX: "scroll" }}
+				{...events}
+				maxWidth={800}
+				ref={ref}
+				px={2}
+				py={2}
+				className={StyleModule.player_cards_stack}
+			>
+				{makeCards()}
+			</Stack>
+			<SelectCardDialog />
+		</>
 	);
 };
 
-export default CardsStack;
+export default PlayerCards;
