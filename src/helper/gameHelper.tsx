@@ -77,6 +77,26 @@ export const playCard = async (
 	return true;
 };
 
+export const swapCards = async (
+	roomDoc: RoomDoc,
+	player1Id: string,
+	player2Id: string
+) => {
+	const player1Index = getIndexFromUid(roomDoc.players, player1Id);
+	const player2Index = getIndexFromUid(roomDoc.players, player2Id);
+
+	const player1Cards = [...roomDoc.players[player1Index].cards];
+	const player2Cards = [...roomDoc.players[player2Index].cards];
+
+	let newPlayersArray = [...roomDoc.players];
+	newPlayersArray[player1Index].cards = player2Cards;
+	newPlayersArray[player2Index].cards = player1Cards;
+
+	await updateDoc(doc(db, "rooms", roomDoc.roomId), {
+		players: newPlayersArray,
+	});
+};
+
 export const addNewCard = (roomDoc: RoomDoc, uid: string, newCard: Card) => {
 	let newPlayersArray = [...roomDoc.players];
 
